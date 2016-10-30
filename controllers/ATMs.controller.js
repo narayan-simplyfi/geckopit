@@ -19,7 +19,6 @@ sap.ui.define([
 
         onInit: function() {
             var oThis = this;
-            var oView = oThis.getView();
             var oComponent = oThis.getOwnerComponent();
             oThis.Formatters = Formatters;
             oThis._router = oComponent.getRouter();
@@ -122,10 +121,10 @@ sap.ui.define([
 
                     if (type === "priority" && value === "critical") {
                         if (bankItem.CRITICAL_COUNT !== "0") {
-                            atms.push(bankItem)
+                            atms.push(bankItem);
                         }
                     } else {
-                        atms.push(bankItem)
+                        atms.push(bankItem);
                     }
                 });
             });
@@ -193,7 +192,6 @@ sap.ui.define([
         onSensorSwitch: function() {
             var oThis = this;
             List.sensorSwitch(oThis);
-        },
-
+        }
     });
 });

@@ -5,12 +5,8 @@ sap.ui.define([], function() {
     var local = jQuery.sap.getModulePath("ipms.atm.app") + "/data/";
 
     var geckopit =  function() { return root + "GECKOPIT/" ;};
-    var sensors =  function() { 
-    	return local + "sensors.json"
-    };
 
     return {
-    	geckopit: geckopit,
-    	sensors: sensors
+    	geckopit: geckopit
     };
 });

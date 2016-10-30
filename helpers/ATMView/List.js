@@ -101,21 +101,26 @@ sap.ui.define([
     };
 
     var tabChange = function(oThis, oEvent) {
-        var oView = oThis.getView();
+        var oComponent = oThis.getOwnerComponent();
         var sKey = oEvent.getParameter("key");
         if (sKey === "sensors") {
-            Api.get(Urls.sensors())
-                .done(function(d) {
-                    jQuery.sap.delayedCall(10, oThis, function() {
-                        _setSensorsData(oThis, d.d.results[0]);
-                    });
-                })
-                .fail(function(d) {
-                    MessageToast.show(oThis.getI18nText('message_error_failed_to_fetch_data'));
-                })
-                .always(function(d) {
-                    BusyIndicator.hide();
-                });
+	        BusyIndicator.show(0);
+    		var oData = oComponent.getModel("IoT");
+    		var device_id = oThis.getModelData("SelectedATM", "/data/DEVICEID");
+			oData.read("/app.svc/IPMS_SENSOR.T_IOT_1F0D3E4EB8C68DF7577E?$top=1&$filter=G_DEVICE eq '" + device_id + "'", null, null, false,
+				function(d) {
+					if (d.results.length > 0) {
+						_setSensorsData(oThis, d.results[0]);
+					} else {
+						MessageToast.show("No sensor data found for this ATM");
+					}
+					BusyIndicator.hide();
+				},
+				function(d) {
+					MessageToast.show(oThis.getI18nText('message_error_failed_to_fetch_data'));
+					BusyIndicator.hide();
+				}
+			);
         }
     };
 
