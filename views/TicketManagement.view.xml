@@ -1,0 +1,133 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:c="sap.ui.commons" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="ipms.atm.app.controllers.TicketManagement" xmlns:html="http://www.w3.org/1999/xhtml">
+    <Page>
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                    <Button icon="sap-icon://home" type="Transparent" press="handleNavHome" />
+                </contentLeft>
+                <contentMiddle>
+                    <Label text="{i18n>title_ticket_management} - {i18n>title_app}" />
+                </contentMiddle>
+                <contentRight>
+                    <Button icon="sap-icon://person-placeholder" type="Transparent" text="{UserData>/FIRST_NAME} {UserData>/LAST_NAME}" />
+                    <Button icon="sap-icon://log" press="handleLogout" />
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <SplitContainer id="tickets-split-container" initialDetail="ticket-details-page" initialMaster="ticket-list-page">
+                <masterPages>
+                    <Page showHeader="false" title="Tickets" id="ticket-list-page">
+                        <subHeader>
+                            <Toolbar>
+                                <Label text="Tickets ({Tickets>/searched_length} / {Tickets>/data/length})" />
+                            </Toolbar>
+                        </subHeader>
+                        <content>
+                            <Toolbar>
+                                <SearchField id="tickets-list-filter" liveChange="filterTickets" width="100%" />
+                            </Toolbar>
+                            <ScrollContainer class="tickets-list-sc" horizontal="false" vertical="true" focusable="true">
+                                <List id="tickets-list" items="{Tickets>/data/}" mode="SingleSelectMaster" selectionChange="onTicketSelection">
+                                    <items>
+                                        <ObjectListItem title="{Tickets>TICKET_SUBJECT}" type="Navigation">
+                                            <firstStatus>
+                                                <ObjectStatus text="{ path: 'Tickets>TICKET_PRIORITY', formatter: '.Formatters.ticketPriorityText' }" state="{ path: 'Tickets>TICKET_PRIORITY', formatter: '.Formatters.ticketPriorityState' }" />
+                                            </firstStatus>
+                                            <secondStatus>
+                                                <ObjectStatus text="{ path: 'Tickets>TICKET_STATUS', formatter: '.Formatters.ticketStatusText' }" />
+                                            </secondStatus>
+                                            <attributes>
+                                                <ObjectAttribute text="{Tickets>TICKET_TO}" />
+                                                <ObjectAttribute text="{Tickets>ATM_ID}" />
+                                            </attributes>
+                                        </ObjectListItem>
+                                    </items>
+                                </List>
+                            </ScrollContainer>
+                        </content>
+                        <footer>
+                            <Toolbar>
+                                <ToolbarSpacer/>
+                                <Button icon="sap-icon://add" press="onCreateTicket" text="Create Ticket" tooltip="Create Ticket" />
+                            </Toolbar>
+                        </footer>
+                    </Page>
+                </masterPages>
+                <detailPages>
+                    <Page showHeader="false" title="Details" id="ticket-details-page" class="ticket-details-page">
+                        <content>
+                            <IconTabBar expanded="true" expandable="false" class="sapUiLargeMarginTop sapUiResponsiveContentPadding" stretchContentHeight="true" backgroundDesign="Translucent">
+                                <items>
+                                    <IconTabFilter text="Info" icon="sap-icon://hint">
+                                        <ObjectHeader title="{SelectedTicket>/data/TICKET_SUBJECT}" number="{SelectedTicket>/data/TICKET_ID}">
+                                            <attributes>
+                                                <ObjectAttribute text="Created : {SelectedTicket>/data/CREATED}" />
+                                                <ObjectAttribute text="Updated : {SelectedTicket>/data/MODIFIED}" />
+                                                <ObjectAttribute text="Assigned To : {SelectedTicket>/data/TICKET_TO}" />
+                                            </attributes>
+                                            <statuses>
+                                                <ObjectStatus text="{ path: 'SelectedTicket>/data/TICKET_PRIORITY', formatter: '.Formatters.ticketPriorityText' }" state="{ path: 'SelectedTicket>/data/TICKET_PRIORITY', formatter: '.Formatters.ticketPriorityState' }" />
+                                                <ObjectStatus text="{ path: 'SelectedTicket>/data/TICKET_STATUS', formatter: '.Formatters.ticketStatusText' }" />
+                                                <ObjectStatus text="ATM : {SelectedTicket>/data/ATM_ID} ({SelectedTicket>/data/BANK_NAME}, {SelectedTicket>/data/AREA_NAME})" />
+                                            </statuses>
+                                        </ObjectHeader>
+                                        <Panel width="auto" class="sapUiResponsiveMargin">
+                                            <headerToolbar>
+                                                <Toolbar height="3rem">
+                                                    <Title text="Description" />
+                                                </Toolbar>
+                                            </headerToolbar>
+                                            <content>
+                                                <Text text="{SelectedTicket>/data/TICKET_DESCRIPTION}" />
+                                            </content>
+                                        </Panel>
+                                    </IconTabFilter>
+                                </items>
+                            </IconTabBar>
+                        </content>
+                        <footer>
+                            <Toolbar>
+                                <ToolbarSpacer/>
+                                <HBox visible="{= ${UserData>/ROLE_NAME} === 'Supervisor'}">
+                                    <Button visible="{= ${SelectedTicket>/data/TICKET_STATUS} === 'CLOSED' || ${SelectedTicket>/data/TICKET_STATUS} === 'FAKE' }" icon="sap-icon://accept" press="handleTicketAction" type="Emphasized" text="Approve" tooltip="Approve">
+                                        <customData>
+                                            <core:CustomData key="type" value="APPROVED"></core:CustomData>
+                                        </customData>
+                                    </Button>
+                                    <Button visible="{= ${SelectedTicket>/data/TICKET_STATUS} === 'CLOSED' || ${SelectedTicket>/data/TICKET_STATUS} === 'FAKE' }" icon="sap-icon://sys-cancel-2" press="handleTicketAction" text="Reject" tooltip="Reject">
+                                        <customData>
+                                            <core:CustomData key="type" value="REJECTED"></core:CustomData>
+                                        </customData>
+                                    </Button>
+                                    <Button visible="{= ${SelectedTicket>/data/TICKET_STATUS} === 'OPENED' }" icon="sap-icon://locked" press="handleTicketAction" text="Close" tooltip="Close">
+                                        <customData>
+                                            <core:CustomData key="type" value="CLOSED"></core:CustomData>
+                                        </customData>
+                                    </Button>
+                                    <Button visible="{= ${SelectedTicket>/data/TICKET_STATUS} === 'OPENED' }" icon="sap-icon://media-forward" press="handleTicketAction" text="Fake" tooltip="Fake">
+                                        <customData>
+                                            <core:CustomData key="type" value="FAKE"></core:CustomData>
+                                        </customData>
+                                    </Button>
+                                </HBox>
+                                <HBox visible="{= ${UserData>/ROLE_NAME} === 'Operator'}">
+                                    <Button visible="{= ${SelectedTicket>/data/TICKET_STATUS} === 'OPENED' }" icon="sap-icon://locked" press="handleTicketAction" text="Close" tooltip="Close">
+                                        <customData>
+                                            <core:CustomData key="type" value="CLOSED"></core:CustomData>
+                                        </customData>
+                                    </Button>
+                                    <Button visible="{= ${SelectedTicket>/data/TICKET_STATUS} === 'OPENED' }" icon="sap-icon://media-forward" press="handleTicketAction" text="Fake" tooltip="Fake">
+                                        <customData>
+                                            <core:CustomData key="type" value="FAKE"></core:CustomData>
+                                        </customData>
+                                    </Button>
+                                </HBox>
+                            </Toolbar>
+                        </footer>
+                    </Page>
+                </detailPages>
+            </SplitContainer>
+        </content>
+    </Page>
+</core:View>

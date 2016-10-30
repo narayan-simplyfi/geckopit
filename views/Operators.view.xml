@@ -1,0 +1,140 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:c="sap.ui.commons" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="ipms.atm.app.controllers.Operators" xmlns:html="http://www.w3.org/1999/xhtml">
+    <Page>
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                    <Button icon="sap-icon://home" type="Transparent" press="handleNavHome" />
+                </contentLeft>
+                <contentMiddle>
+                    <Label text="Operators - {i18n>title_app}" />
+                </contentMiddle>
+                <contentRight>
+                    <Button icon="sap-icon://person-placeholder" type="Transparent" text="{UserData>/FIRST_NAME} {UserData>/LAST_NAME}" />
+                    <Button icon="sap-icon://log" press="handleLogout" />
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <SplitContainer id="operators-split-container" initialDetail="operators-details-page" initialMaster="operators-list-page">
+                <masterPages>
+                    <Page showHeader="false" title="Operators" id="operators-list-page">
+                        <subHeader>
+                            <Toolbar>
+                                <Label text="Operators ({Operators>/searched_length} / {Operators>/data/length})" />
+                            </Toolbar>
+                        </subHeader>
+                        <content>
+                            <Toolbar>
+                                <SearchField id="operators-list-filter" liveChange="filterOperators" width="100%" />
+                            </Toolbar>
+                            <ScrollContainer class="operators-list-sc" horizontal="false" vertical="true" focusable="true">
+                                <List id="operators-list" items="{Operators>/data/}" mode="SingleSelectMaster" selectionChange="onOperatorSelection">
+                                    <items>
+                                        <StandardListItem visible="{Operators>isCritical}" description="Tickets: {Operators>tickets/length}" title="{Operators>operatorName}" type="Navigation" />
+                                    </items>
+                                </List>
+                            </ScrollContainer>
+                        </content>
+                        <footer>
+                            <Toolbar>
+                                <ToolbarSpacer/>
+                            </Toolbar>
+                        </footer>
+                    </Page>
+                </masterPages>
+                <detailPages>
+                    <Page showHeader="false" title="Details" id="operators-details-page" class="operators-details-page">
+                        <content>
+                            <ObjectHeader class="operators-details-header" title="{SelectedOperator>/data/operatorName}" number="{SelectedOperator>/data/operatorId}" numberUnit="{SelectedOperator>/data/operatorRole} ID">
+                                <attributes>
+                                    <ObjectAttribute text="{SelectedOperator>/data/operatorRole}" />
+                                    <ObjectAttribute active="true" text="{SelectedOperator>/data/atmsCount} Assigned ATMs" />
+                                    <ObjectAttribute active="true" text="{SelectedOperator>/data/operatorPhone}" press="handleLinkPress">
+                                        <customData>
+                                            <core:CustomData key="type" value="phone"></core:CustomData>
+                                            <core:CustomData key="value" value="{SelectedOperator>/data/operatorPhone}"></core:CustomData>
+                                        </customData>
+                                    </ObjectAttribute>
+                                    <ObjectAttribute active="true" text="{SelectedOperator>/data/operatorEmail}" press="handleLinkPress">
+                                        <customData>
+                                            <core:CustomData key="type" value="email"></core:CustomData>
+                                            <core:CustomData key="value" value="{SelectedOperator>/data/operatorEmail}"></core:CustomData>
+                                        </customData>
+                                    </ObjectAttribute>
+                                </attributes>
+                            </ObjectHeader>
+                            <IconTabBar expanded="true" expandable="false" id="operators-details-ictb" class="operators-details-ictb" stretchContentHeight="false" backgroundDesign="Translucent" select="onTicketsPrioChange" selectedKey="all">
+                                <items>
+                                    <IconTabFilter showAll="true" count="{SelectedOperator>/data/tickets/length}" text="Tickets" key="all" />
+                                    <IconTabSeparator />
+                                    <IconTabFilter icon="sap-icon://warning2" iconColor="Positive" count="{SelectedOperator>/data/lowCount}" text="Low" key="low" />
+                                    <IconTabFilter icon="sap-icon://warning2" iconColor="Critical" count="{SelectedOperator>/data/mediumCount}" text="Medium" key="medium" />
+                                    <IconTabFilter icon="sap-icon://warning2" iconColor="Negative" count="{SelectedOperator>/data/highCount}" text="High" key="high" />
+                                </items>
+                            </IconTabBar>
+                            <ScrollContainer class="operators-tickets-sc" horizontal="false" vertical="true" focusable="true">
+                                <Table id="operators-tickets-table" class="operators-tickets-table" growingScrollToLoad="true" items="{ path:'SelectedOperator>/data/tickets', sorter: { path: 'ATM_ID', descending: false } }">
+                                    <headerToolbar>
+                                        <Toolbar>
+                                            <ToolbarSpacer></ToolbarSpacer>
+                                            <SearchField id="operators-tickets-table-filter" placeholder="Search..." liveChange="filterOperatorTickets" width="400px" />
+                                        </Toolbar>
+                                    </headerToolbar>
+                                    <columns>
+                                        <Column hAlign="Center">
+                                            <Text text="Ticket ID" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Text text="ATM ID" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Text text="Bank Name" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Text text="Area Name" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Text text="Subject" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Text text="Description" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Text text="Status" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Text text="Priority" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Text text="Created On" />
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{SelectedOperator>TICKET_ID}" />
+                                                <Text text="{SelectedOperator>ATM_ID}" />
+                                                <Text text="{SelectedOperator>BANK_NAME}" />
+                                                <Text text="{SelectedOperator>AREA_NAME}" />
+                                                <Text text="{SelectedOperator>TICKET_SUBJECT}" />
+                                                <Label text="{SelectedOperator>TICKET_DESCRIPTION}" />
+                                                <Text text="{ path: 'SelectedOperator>TICKET_STATUS', formatter: '.Formatters.ticketStatusText' }" />
+                                                <Text text="{ path: 'SelectedOperator>TICKET_PRIORITY', formatter: '.Formatters.ticketPriorityText' }" />
+                                                <Text text="{SelectedOperator>CREATED}" />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </ScrollContainer>
+                        </content>
+                        <footer>
+                            <Toolbar>
+                                <ToolbarSpacer/>
+                            </Toolbar>
+                        </footer>
+                    </Page>
+                </detailPages>
+            </SplitContainer>
+        </content>
+    </Page>
+</core:View>

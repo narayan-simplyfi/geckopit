@@ -1,0 +1,30 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:c="sap.ui.commons" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="ipms.atm.app.controllers.Login" xmlns:html="http://www.w3.org/1999/xhtml">
+    <Page>
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                </contentLeft>
+                <contentMiddle>
+                    <Label text="{i18n>title_login} - {i18n>title_app}" />
+                </contentMiddle>
+                <contentRight>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <FlexBox direction="Column" alignItems="Center" justifyContent="Center" height="100%">
+                <items>
+                    <Input type="Text" value="{View>/username}" placeholder="{i18n>placeholder_username}" width="300px" />
+                    <Input type="Password" value="{View>/password}" placeholder="{i18n>placeholder_password}" width="300px" />
+                    <Button text="{i18n>button_login}" width="300px" press="handleLogin" type="Emphasized" />
+                </items>
+            </FlexBox>
+        </content>
+        <footer>
+            <Bar>
+                <contentLeft>
+                </contentLeft>
+            </Bar>
+        </footer>
+    </Page>
+</core:View>

@@ -1,0 +1,120 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
+    <TileContainer class="dashboard-page-tiles-container">
+        <tiles>
+            <CustomTile class="sapUiResponsiveMargin sapMTile dashboard-custom-tile">
+                <content>
+                    <FlexBox direction="Column" alignItems="Start">
+                        <FlexBox alignItems="Start" justifyContent="Start" class="sapUiTinyMarginTop sapUiTinyMarginBegin">
+                            <core:Icon src="sap-icon://money-bills" size="28px" color="#009de0" class="" />
+                            <Title text="ATM" class="sapUiTinyMargin"></Title>
+                        </FlexBox>
+                        <FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop sapUiContentPadding">
+                            <items>
+                                <Text text="Responsible ATM"></Text>
+                                <Link text="{View>/atms/total}" press="handleTileNav">
+                                <customData>
+                                    <core:CustomData key="app" value="atms" />
+                                    <core:CustomData key="type" value="" />
+                                    <core:CustomData key="value" value="" />
+                                </customData>
+                                </Link>
+                            </items>
+                        </FlexBox>
+                        <FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiContentPadding">
+                            <items>
+                                <Text text="Critical ATM"></Text>
+                                <Link text="{View>/atms/critical}" press="handleTileNav">
+                                <customData>
+                                    <core:CustomData key="app" value="atms" />
+                                    <core:CustomData key="type" value="priority" />
+                                    <core:CustomData key="value" value="critical" />
+                                </customData>
+                                </Link>
+                            </items>
+                        </FlexBox>
+                    </FlexBox>
+                </content>
+            </CustomTile>
+            <CustomTile class="sapUiResponsiveMargin sapMTile dashboard-custom-tile">
+                <content>
+                    <FlexBox direction="Column" alignItems="Start">
+                        <FlexBox alignItems="Start" justifyContent="Start" class="sapUiTinyMarginTop sapUiTinyMarginBegin">
+                            <core:Icon src="sap-icon://task" size="28px" color="#009de0" class="" />
+                            <Title text="Tickets" class="sapUiTinyMargin"></Title>
+                        </FlexBox>
+                        <FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop sapUiContentPadding">
+                            <items>
+                                <Text text="Total Tickets"></Text>
+                                <Link text="{View>/tickets/total}" press="handleTileNav">
+                                <customData>
+                                    <core:CustomData key="app" value="ticket-management" />
+                                    <core:CustomData key="type" value="" />
+                                    <core:CustomData key="value" value="" />
+                                </customData>
+                                </Link>
+                            </items>
+                        </FlexBox>
+                        <FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiContentPadding">
+                            <items>
+                                <Text text="Status Open Tickets"></Text>
+                                <Link text="{View>/tickets/open}" press="handleTileNav">
+                                <customData>
+                                    <core:CustomData key="app" value="ticket-management" />
+                                    <core:CustomData key="type" value="status" />
+                                    <core:CustomData key="value" value="open" />
+                                </customData>
+                                </Link>
+                            </items>
+                        </FlexBox>
+                        <FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiContentPadding">
+                            <items>
+                                <Text text="Priority High Tickets"></Text>
+                                <Link text="{View>/tickets/critical}" press="handleTileNav">
+                                <customData>
+                                    <core:CustomData key="app" value="ticket-management" />
+                                    <core:CustomData key="type" value="priority" />
+                                    <core:CustomData key="value" value="critical" />
+                                </customData>
+                                </Link>
+                            </items>
+                        </FlexBox>
+                    </FlexBox>
+                </content>
+            </CustomTile>
+            <CustomTile class="sapUiResponsiveMargin sapMTile dashboard-custom-tile">
+                <content>
+                    <FlexBox direction="Column" alignItems="Start">
+                        <FlexBox alignItems="Start" justifyContent="Start" class="sapUiTinyMarginTop sapUiTinyMarginBegin">
+                            <core:Icon src="sap-icon://employee-pane" size="28px" color="#009de0" class="" />
+                            <Title text="Operators" class="sapUiTinyMargin"></Title>
+                        </FlexBox>
+                        <FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop sapUiContentPadding">
+                            <items>
+                                <Text text="Total Operators"></Text>
+                                <Link text="{View>/operators/total}" press="handleTileNav">
+                                <customData>
+                                    <core:CustomData key="app" value="operators" />
+                                    <core:CustomData key="type" value="" />
+                                    <core:CustomData key="value" value="" />
+                                </customData>
+                                </Link>
+                            </items>
+                        </FlexBox>
+                        <FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiContentPadding">
+                            <items>
+                                <Text text="Critical Operators"></Text>
+                                <Link text="{View>/operators/critical}" press="handleTileNav">
+                                <customData>
+                                    <core:CustomData key="app" value="operators" />
+                                    <core:CustomData key="type" value="priority" />
+                                    <core:CustomData key="value" value="critical" />
+                                </customData>
+                                </Link>
+                            </items>
+                        </FlexBox>
+                    </FlexBox>
+                </content>
+            </CustomTile>
+        </tiles>
+    </TileContainer>
+</core:FragmentDefinition>

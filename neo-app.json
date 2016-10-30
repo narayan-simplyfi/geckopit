@@ -1,0 +1,30 @@
+{
+  "welcomeFile": "index.html",
+  "routes": [
+    {
+      "path": "/resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/resources"
+      },
+      "description": "SAPUI5 Resources"
+    },
+    {
+      "path": "/services/userapi",
+      "target": {
+        "type": "service",
+        "name": "userapi"
+      },
+      "description": "SAP User API"
+    },
+    {
+      "path": "/destinations/IOT",
+      "target": {
+        "type": "destination",
+        "name": "IOT_ATM"
+      },
+      "description": "IOT Service"
+    }
+  ]
+}

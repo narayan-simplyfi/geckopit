@@ -1,0 +1,28 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
+    <Dialog title="Create Ticket" contentWidth="250px" design="Bold">
+        <content>
+            <form:SimpleForm editable="true">
+                <Label text="ATM" />
+                <Select selectedKey="{TicketCreate>/atm}" items="{
+                        path: 'TicketCreate>/all_atms'
+                    }">
+                    <core:Item key="{TicketCreate>id}" text="{TicketCreate>name}" />
+                </Select>
+                <Label text="Priority" />
+                <Select selectedKey="{TicketCreate>/priority}">
+                    <core:Item key="HIGH" text="High" />
+                    <core:Item key="MEDIUM" text="Medium" />
+                    <core:Item key="LOW" text="Low" />
+                </Select>
+                <Label text="Subject" />
+                <Input type="Text" value="{TicketCreate>/subject}" valueLiveUpdate="true" />
+                <Label text="Comments" />
+                <TextArea value="{TicketCreate>/comments}" valueLiveUpdate="true" />
+            </form:SimpleForm>
+        </content>
+        <buttons>
+            <Button enabled="{= (${TicketCreate>/atm} === '' || ${TicketCreate>/subject} === '' || ${TicketCreate>/comments} === '') ? false : true }" text="Create" press="onSubmitTicketCreate" type="Emphasized" />
+            <Button text="Cancel" press="onCancelTicketCreate" />
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

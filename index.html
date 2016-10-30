@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8' />
+    <title>Geckopit</title>
+    <script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js" id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.uxap" data-sap-ui-theme="sap_bluecrystal" data-sap-ui-compatVersion="edge" data-sap-ui-xx-bindingSyntax="complex" data-sap-ui-resourceroots='{ 
+					"ipms.atm.app":"./"
+				}'>
+    </script>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDpO97833NVjFuBxSFgJYbel-x0jV6xJJg&sensor=false"></script>
+    <script>
+    sap.ui.getCore().attachInit(function() {
+        sap.ui.require([
+            "sap/m/Shell",
+            "sap/ui/core/ComponentContainer"
+        ], function(Shell, ComponentContainer) {
+            new Shell("Shell", {
+                title: "{i18n>app_title}",
+                showLogout: true,
+                appWidthLimited: false,
+                app: new ComponentContainer({
+                    name: 'ipms.atm.app'
+                })
+            }).placeAt('content');
+        })
+    });
+    </script>
+</head>
+
+<body class="sapUiBody" role="application">
+    <div id="content"></div>
+</body>
+
+</html>

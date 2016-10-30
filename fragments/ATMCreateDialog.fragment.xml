@@ -1,0 +1,105 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
+    <Dialog title="Create ATM" contentWidth="800px" design="Bold">
+        <content>
+            <NavContainer id="create-atm-nc" height="700px" class="navContainerControl">
+                <Page id="create-atm-page-1" title="Basic Details (1/3)">
+                    <content>
+                        <form:SimpleForm>
+                            <Label class="sapUiSmallMarginTop" text="ATM ID" />
+                            <Input type="Text" value="{ATM>/atmId}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop" text="ATM Name" />
+                            <Input type="Text" value="{ATM>/atmName}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop" text="Operator" />
+                            <Select selectedKey="{ATM>/userid}" items="{ path: 'ATMCreateHelpers>/users/' }">
+                                <core:Item key="{ATMCreateHelpers>userId}" text="{ATMCreateHelpers>userFirstname} {ATMCreateHelpers>userLastname}" />
+                            </Select>
+                            <Label class="sapUiSmallMarginTop" text="Bank" />
+                            <Select selectedKey="{ATM>/bankId}" items="{ path: 'ATMCreateHelpers>/banks/' }">
+                                <core:Item key="{ATMCreateHelpers>bankId}" text="{ATMCreateHelpers>bankName}" />
+                            </Select>
+                            <Label class="sapUiSmallMarginTop" text="Area" />
+                            <Input type="Text" value="{ATM>/areaName}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop" text="City" />
+                            <Select selectedKey="{ATM>/cityId}" items="{ path: 'ATMCreateHelpers>/cities/' }">
+                                <core:Item key="{ATMCreateHelpers>cityId}" text="{ATMCreateHelpers>cityName}" />
+                            </Select>
+                            <Label class="sapUiSmallMarginTop" text="Pincode" />
+                            <Input type="Text" value="{ATM>/pincode}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop" text="Latitude" />
+                            <Input type="Text" value="{ATM>/latitude}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop" text="Longitude" />
+                            <Input type="Text" value="{ATM>/logitude}" valueLiveUpdate="true" />
+                        </form:SimpleForm>
+                    </content>
+                    <footer>
+                        <Toolbar>
+                            <ToolbarSpacer />
+                            <Button text="Cancel" press="onCancelCreateATM" />
+                            <Button enabled="{ parts:[ {path:'ATM>/atmId'},{path:'ATM>/atmName'},{path:'ATM>/userid'},{path:'ATM>/bankId'},{path:'ATM>/areaName'},{path:'ATM>/cityId'},{path:'ATM>/pincode'},{path:'ATM>/latitude'},{path:'ATM>/logitude'} ], formatter:'.Formatters.createATMPage1' }" text="Next (Contact Info)" press="goToPage2" />
+                        </Toolbar>
+                    </footer>
+                </Page>
+                <Page id="create-atm-page-2" title="Contact Info (2/3)" showNavButton="true" navButtonPress="goBackToPage1">
+                    <content>
+                        <form:SimpleForm editable="true" title="Contact Person 1">
+                            <Label text="Name" />
+                            <Input type="Text" value="{ATM>/contactPerson1}" valueLiveUpdate="true" />
+                            <Label text="Email" />
+                            <Input type="Text" value="{ATM>/contactEmail1}" valueLiveUpdate="true" />
+                            <Label text="Phone" />
+                            <Input type="Text" value="{ATM>/contactNo1}" valueLiveUpdate="true" />
+                        </form:SimpleForm>
+                        <form:SimpleForm editable="true" title="Contact Person 2">
+                            <Label text="Name" />
+                            <Input type="Text" value="{ATM>/contactPerson2}" valueLiveUpdate="true" />
+                            <Label text="Email" />
+                            <Input type="Text" value="{ATM>/contactEmail2}" valueLiveUpdate="true" />
+                            <Label text="Phone" />
+                            <Input type="Text" value="{ATM>/contactNo2}" valueLiveUpdate="true" />
+                        </form:SimpleForm>
+                        <form:SimpleForm editable="true" title="Contact Person 3">
+                            <Label text="Name" />
+                            <Input type="Text" value="{ATM>/contactPerson3}" valueLiveUpdate="true" />
+                            <Label text="Email" />
+                            <Input type="Text" value="{ATM>/contactEmail3}" valueLiveUpdate="true" />
+                            <Label text="Phone" />
+                            <Input type="Text" value="{ATM>/contactNo3}" valueLiveUpdate="true" />
+                        </form:SimpleForm>
+                    </content>
+                    <footer>
+                        <Toolbar>
+                            <ToolbarSpacer />
+                            <Button text="Cancel" press="onCancelCreateATM" />
+                            <Button enabled="{ parts:[ {path:'ATM>/contactPerson1'},{path:'ATM>/contactEmail1'},{path:'ATM>/contactNo1'},{path:'ATM>/contactPerson2'},{path:'ATM>/contactEmail2'},{path:'ATM>/contactNo2'},{path:'ATM>/contactPerson3'},{path:'ATM>/contactEmail3'},{path:'ATM>/contactNo3'} ], formatter:'.Formatters.createATMPage2' }" text="Next (Sensor Info)" press="goToPage3" />
+                        </Toolbar>
+                    </footer>
+                </Page>
+                <Page id="create-atm-page-3" title="Sensor Info (3/3)" showNavButton="true" navButtonPress="goBackToPage2">
+                    <content>
+                        <form:SimpleForm editable="true">
+                            <Label text="Device ID" />
+                            <Input type="Text" value="{ATM>/deviceid}" valueLiveUpdate="true" />
+                            <Label text="Brand" />
+                            <Input type="Text" value="{ATM>/brandName}" valueLiveUpdate="true" />
+                            <Label text="IP Address" />
+                            <Input type="Text" value="{ATM>/ipAddress}" valueLiveUpdate="true" />
+                            <Label text="Installation Date" />
+                            <DatePicker value="{ATM>/installationDate}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM, yyyy" valueLiveUpdate="true" />
+                            <Label text="Online" />
+                            <Switch state="{ATM>/online}"></Switch>
+                            <Label text="Status" />
+                            <Switch state="{ATM>/status}"></Switch>
+                        </form:SimpleForm>
+                    </content>
+                    <footer>
+                        <Toolbar>
+                            <ToolbarSpacer />
+                            <Button text="Cancel" press="onCancelCreateATM" />
+                            <Button enabled="{ parts:[ {path:'ATM>/deviceid'},{path:'ATM>/brandName'},{path:'ATM>/ipAddress'},{path:'ATM>/installationDate'} ], formatter:'.Formatters.createATMPage3' }" text="Create ATM" press="submitCreateATM" type="Emphasized" />
+                        </Toolbar>
+                    </footer>
+                </Page>
+            </NavContainer>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>
