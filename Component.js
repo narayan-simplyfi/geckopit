@@ -18,9 +18,7 @@ sap.ui.define([
                 fullWidth: true,
                 serviceConfig: {
                     name: "app.svc/IPMS_SENSOR.T_IOT_1F0D3E4EB8C68DF7577E",
-                    // serviceUrl: "/destinations/IOT/com.sap.iotservices.mms/v1/api/http/",
-                    serviceUrl: "https://ipmsv21-c918f143b.dispatcher.ap1.hana.ondemand.com/destinations/IOT/com.sap.iotservices.mms/v1/api/http/"
-                        // IPMS_SENSOR.T_IOT_D4E24248CF7E678D0591
+                    serviceUrl: "/destinations/IOT/com.sap.iotservices.mms/v1/api/http/",
                 }
             },
             routing: {
@@ -99,9 +97,7 @@ sap.ui.define([
             // var oModel = new sap.ui.model.odata.ODataModel(sServiceUrl, {
             //     json: true,
             //     loadMetadataAsync: true
-            // }, "narayanan@indiapayment.in", "vaibhav@2004");
-
-            // var oModel = new sap.ui.model.odata.ODataModel(sServiceUrl, true, "narayanan@indiapayment.in", "vaibhav@2004");
+            // });
 
             // oModel.attachMetadataFailed(function() {
             //     console.log('MetadataFailed');

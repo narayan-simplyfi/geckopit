@@ -35,11 +35,11 @@
                         <Toolbar>
                             <ToolbarSpacer />
                             <Button text="Cancel" press="onCancelCreateATM" />
-                            <Button enabled="{ parts:[ {path:'ATM>/atmId'},{path:'ATM>/atmName'},{path:'ATM>/userid'},{path:'ATM>/bankId'},{path:'ATM>/areaName'},{path:'ATM>/cityId'},{path:'ATM>/pincode'},{path:'ATM>/latitude'},{path:'ATM>/logitude'} ], formatter:'.Formatters.createATMPage1' }" text="Next (Contact Info)" press="goToPage2" />
+                            <Button enabled="{ parts:[ {path:'ATM>/atmId'},{path:'ATM>/atmName'},{path:'ATM>/userid'},{path:'ATM>/bankId'},{path:'ATM>/areaName'},{path:'ATM>/cityId'},{path:'ATM>/pincode'},{path:'ATM>/latitude'},{path:'ATM>/logitude'} ], formatter:'.Formatters.createATMPage1' }" text="Next (Contact Info)" press="goToCreateATMPage2" />
                         </Toolbar>
                     </footer>
                 </Page>
-                <Page id="create-atm-page-2" title="Contact Info (2/3)" showNavButton="true" navButtonPress="goBackToPage1">
+                <Page id="create-atm-page-2" title="Contact Info (2/3)" showNavButton="true" navButtonPress="goBackToCreateATMPage1">
                     <content>
                         <form:SimpleForm editable="true" title="Contact Person 1">
                             <Label text="Name" />
@@ -70,11 +70,11 @@
                         <Toolbar>
                             <ToolbarSpacer />
                             <Button text="Cancel" press="onCancelCreateATM" />
-                            <Button enabled="{ parts:[ {path:'ATM>/contactPerson1'},{path:'ATM>/contactEmail1'},{path:'ATM>/contactNo1'},{path:'ATM>/contactPerson2'},{path:'ATM>/contactEmail2'},{path:'ATM>/contactNo2'},{path:'ATM>/contactPerson3'},{path:'ATM>/contactEmail3'},{path:'ATM>/contactNo3'} ], formatter:'.Formatters.createATMPage2' }" text="Next (Sensor Info)" press="goToPage3" />
+                            <Button enabled="{ parts:[ {path:'ATM>/contactPerson1'},{path:'ATM>/contactEmail1'},{path:'ATM>/contactNo1'},{path:'ATM>/contactPerson2'},{path:'ATM>/contactEmail2'},{path:'ATM>/contactNo2'},{path:'ATM>/contactPerson3'},{path:'ATM>/contactEmail3'},{path:'ATM>/contactNo3'} ], formatter:'.Formatters.createATMPage2' }" text="Next (Sensor Info)" press="goToCreateATMPage3" />
                         </Toolbar>
                     </footer>
                 </Page>
-                <Page id="create-atm-page-3" title="Sensor Info (3/3)" showNavButton="true" navButtonPress="goBackToPage2">
+                <Page id="create-atm-page-3" title="Sensor Info (3/3)" showNavButton="true" navButtonPress="goBackToCreateATMPage2">
                     <content>
                         <form:SimpleForm editable="true">
                             <Label text="Device ID" />
