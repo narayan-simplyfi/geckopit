@@ -5,7 +5,7 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "ipms/atm/app/helpers/Api",
     "ipms/atm/app/helpers/Utils",
-    "ipms/atm/app/helpers/Urls",
+    "ipms/atm/app/helpers/Urls"
 ], function(JSONModel, BusyIndicator, MessageToast, Filter, Api, Utils, Urls) {
     "use strict";
 
