@@ -59,7 +59,7 @@ sap.ui.define([
             oThis.setModel(new JSONModel({
                 "type": params.type,
                 "value": params.value,
-                "show": "list"
+                "show": "map"
             }), "View");
             List.setModels(oThis);
         },
@@ -146,11 +146,7 @@ sap.ui.define([
                 "searched_length": atms.length
             }), "ATMs");
 
-            jQuery.sap.delayedCall(10, oThis, function() {
-                Sensors.setData(oThis);
-                List.setData(oThis, atms[0]);
-                Map.setData(oThis);
-            });
+            Sensors.setData(oThis);
         },
 
         handleChangeView: function(oEvent) {

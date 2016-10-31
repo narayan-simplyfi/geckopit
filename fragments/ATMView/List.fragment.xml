@@ -126,7 +126,7 @@
                                     </content>
                                 </Panel>
                             </IconTabFilter>
-                            <IconTabFilter icon="sap-icon://radar-chart" key="sensors" text="Sensors">
+                            <IconTabFilter icon="sap-icon://radar-chart" key="sensors" text="Sensors" count="{SelectedATM>/data/sensors/length}">
                                 <ScrollContainer class="atm-sensors-list-sc" horizontal="false" vertical="true" focusable="true" busy="{SelectedATM>/data/loading}" busyIndicatorDelay="0">
                                     <Table inset="false" items="{ path: 'SelectedATM>/data/sensors/' }">
                                         <columns>

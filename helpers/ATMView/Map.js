@@ -55,7 +55,19 @@ sap.ui.define([
         // oView.setModel(new JSONModel(data), "atmsModel");
 
         data.forEach(function(atm, index) {
-            var img = "./images/green_dot.png";
+        	console.log(atm);
+        	
+            var img = "G_64X64.png";
+            
+        	switch(atm.sensor_status) {
+        		case 'low':
+        			img = "G_" + atm.BANK_ID + "_46X46.png";
+        			break;
+        		case 'critical':
+        			img = "R_" + atm.BANK_ID + "_46X46.png";
+        			break;
+        	}
+        
             var icon = new google.maps.MarkerImage(
                 img,
                 new google.maps.Size(64, 64),

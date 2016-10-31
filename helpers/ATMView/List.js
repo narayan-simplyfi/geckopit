@@ -51,12 +51,12 @@ sap.ui.define([
         }), "ATM");
     };
 
-    var setData = function(oThis, data) {
+    var setData = function(oThis) {
         var oView = oThis.getView();
         var oList = oView.byId("atms-list");
         var oICTb = oView.byId('atm-details-ictb');
-        
-        _setSelectedATM(oThis, data, "/data/0");
+    	var data = oThis.getModelData("ATMs", "/data/");
+        _setSelectedATM(oThis, (data[0] || []), "/data/0");
         oList.setSelectedItem(oList.getItems()[0]);
         oICTb.setSelectedKey('info');
     };
