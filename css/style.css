@@ -51,3 +51,24 @@
     left: 0;
     right: 0;
 }
+
+.atms-page-map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.atms-page-map-pins {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    width: 160px;
+}
+
+.atms-page-map-pins-single {}
+
+.atms-page-map-pins-single > .sapMFlexItem {
+    width: 100%;
+}

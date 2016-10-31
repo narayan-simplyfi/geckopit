@@ -1,0 +1,176 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
+    <SplitContainer visible="{= ${View>/show} === 'list' }" id="atms-split-container" initialDetail="atms-details-page" initialMaster="atms-list-page">
+        <masterPages>
+            <Page showHeader="false" title="ATMs" id="atms-list-page">
+                <subHeader>
+                    <Toolbar>
+                        <Label text="ATMs ({ATMs>/searched_length} / {ATMs>/data/length})" />
+                    </Toolbar>
+                </subHeader>
+                <content>
+                    <Toolbar>
+                        <SearchField id="atms-list-filter" liveChange="filterATMs" width="100%" />
+                    </Toolbar>
+                    <ScrollContainer class="atms-list-sc" horizontal="false" vertical="true" focusable="true">
+                        <List id="atms-list" items="{ATMs>/data/}" mode="SingleSelectMaster" selectionChange="onATMSelection">
+                            <items>
+                                <ObjectListItem title="{ATMs>ATM_ID}" type="Navigation">
+                                    <firstStatus>
+                                        <ObjectStatus text="{ATMs>CRITICAL_COUNT}" state="None" />
+                                    </firstStatus>
+                                    <secondStatus>
+                                        <ObjectStatus text="Critical" state="Error" />
+                                    </secondStatus>
+                                    <attributes>
+                                        <ObjectAttribute text="{ATMs>ATM_NAME}" />
+                                        <ObjectAttribute text="{ATMs>BANK_NAME}" />
+                                        <ObjectAttribute text="{ATMs>AREA_NAME} - {ATMs>PINCODE}" />
+                                    </attributes>
+                                </ObjectListItem>
+                            </items>
+                        </List>
+                    </ScrollContainer>
+                </content>
+                <footer>
+                    <Toolbar>
+                        <ToolbarSpacer/>
+                        <Button visible="{= ${UserData>/ROLE_NAME} === 'Admin'}" icon="sap-icon://add" press="onCreateATM" text="Create ATM" tooltip="Create ATM" />
+                    </Toolbar>
+                </footer>
+            </Page>
+        </masterPages>
+        <detailPages>
+            <Page showHeader="false" title="Details" id="atms-details-page" class="atms-details-page">
+                <content>
+                    <IconTabBar id="atm-details-ictb" expanded="true" expandable="false" class="sapUiLargeMarginTop sapUiResponsiveContentPadding" stretchContentHeight="true" backgroundDesign="Translucent" select="onTabChange">
+                        <items>
+                            <IconTabFilter icon="sap-icon://hint" key="info" text="Info">
+                                <ObjectHeader title="{SelectedATM>/data/ATM_NAME}" number="{SelectedATM>/data/ATM_ID}" numberUnit="ATM ID">
+                                    <attributes>
+                                        <ObjectAttribute text="Bank : {SelectedATM>/data/BANK_NAME}" />
+                                        <ObjectAttribute text="Area : {SelectedATM>/data/AREA_NAME} - {SelectedATM>/data/PINCODE}" />
+                                    </attributes>
+                                </ObjectHeader>
+                                <Panel width="auto">
+                                    <headerToolbar>
+                                        <Toolbar height="3rem">
+                                            <Title text="Contact Details" />
+                                        </Toolbar>
+                                    </headerToolbar>
+                                    <content>
+                                        <form:SimpleForm width="100%">
+                                            <Label text="Contact Person 1" />
+                                            <Text text="{SelectedATM>/data/CONTACT_PERSON1}" />
+                                            <Label text="" />
+                                            <Link press="handleLinkPress" text="{SelectedATM>/data/CONTACT_EMAIL1}">
+                                            <customData>
+                                                <core:CustomData key="type" value="email"></core:CustomData>
+                                                <core:CustomData key="value" value="{SelectedATM>/data/CONTACT_EMAIL1}"></core:CustomData>
+                                            </customData>
+                                            </Link>
+                                            <Label text="" />
+                                            <Link press="handleLinkPress" text="{SelectedATM>/data/CONTACT_NO1}">
+                                            <customData>
+                                                <core:CustomData key="type" value="phone"></core:CustomData>
+                                                <core:CustomData key="value" value="{SelectedATM>/data/CONTACT_NO1}"></core:CustomData>
+                                            </customData>
+                                            </Link>
+                                            <Label text="Contact Person 2" />
+                                            <Text text="{SelectedATM>/data/CONTACT_PERSON2}" />
+                                            <Label text="" />
+                                            <Link press="handleLinkPress" text="{SelectedATM>/data/CONTACT_EMAIL2}">
+                                            <customData>
+                                                <core:CustomData key="type" value="email"></core:CustomData>
+                                                <core:CustomData key="value" value="{SelectedATM>/data/CONTACT_EMAIL2}"></core:CustomData>
+                                            </customData>
+                                            </Link>
+                                            <Label text="" />
+                                            <Link press="handleLinkPress" text="{SelectedATM>/data/CONTACT_NO2}">
+                                            <customData>
+                                                <core:CustomData key="type" value="phone"></core:CustomData>
+                                                <core:CustomData key="value" value="{SelectedATM>/data/CONTACT_NO2}"></core:CustomData>
+                                            </customData>
+                                            </Link>
+                                            <Label text="Contact Person 3" />
+                                            <Text text="{SelectedATM>/data/CONTACT_PERSON3}" />
+                                            <Label text="" />
+                                            <Link press="handleLinkPress" text="{SelectedATM>/data/CONTACT_EMAIL3}">
+                                            <customData>
+                                                <core:CustomData key="type" value="email"></core:CustomData>
+                                                <core:CustomData key="value" value="{SelectedATM>/data/CONTACT_EMAIL3}"></core:CustomData>
+                                            </customData>
+                                            </Link>
+                                            <Label text="" />
+                                            <Link press="handleLinkPress" text="{SelectedATM>/data/CONTACT_NO3}">
+                                            <customData>
+                                                <core:CustomData key="type" value="phone"></core:CustomData>
+                                                <core:CustomData key="value" value="{SelectedATM>/data/CONTACT_NO3}"></core:CustomData>
+                                            </customData>
+                                            </Link>
+                                        </form:SimpleForm>
+                                    </content>
+                                </Panel>
+                                <Panel width="auto">
+                                    <headerToolbar>
+                                        <Toolbar height="3rem">
+                                            <Title text="Location Details" />
+                                        </Toolbar>
+                                    </headerToolbar>
+                                    <content>
+                                        <form:SimpleForm width="100%">
+                                            <Label text="Latitude" />
+                                            <Text text="{SelectedATM>/data/LATITUDE}" />
+                                            <Label text="Longitude" />
+                                            <Text text="{SelectedATM>/data/LONGITUDE}" />
+                                        </form:SimpleForm>
+                                    </content>
+                                </Panel>
+                            </IconTabFilter>
+                            <IconTabFilter icon="sap-icon://radar-chart" key="sensors" text="Sensors">
+                                <ScrollContainer class="atm-sensors-list-sc" horizontal="false" vertical="true" focusable="true" busy="{SelectedATM>/data/loading}" busyIndicatorDelay="0">
+                                    <Table inset="false" items="{ path: 'SelectedATM>/data/sensors/' }">
+                                        <columns>
+                                            <Column width="40%" hAlign="Center">
+                                                <Text text="{SelectedATM>/data/date}" />
+                                            </Column>
+                                            <Column width="40%" hAlign="Center">
+                                                <Text text="" />
+                                            </Column>
+                                            <Column width="20%" hAlign="Center" visible="{= ${UserData>/ROLE_NAME} !== 'Admin' }">
+                                                <Text text="" />
+                                            </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem>
+                                                <cells>
+                                                    <ObjectStatus class="sapUiSmallMarginTop" text="{ path : 'SelectedATM>type', formatter : '.Formatters.sensorText'}" icon="{ path : 'SelectedATM>type', formatter : '.Formatters.sensorIcon'}" />
+                                                    <ObjectStatus class="sapUiSmallMarginTop" text="{SelectedATM>status}" />
+                                                    <Switch customTextOn="On" customTextOff="Off" visible="{SelectedATM>action}" state="{ path : 'SelectedATM>onState' }" change="onSensorSwitch" />
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                </ScrollContainer>
+                            </IconTabFilter>
+                            <IconTabFilter icon="sap-icon://image-viewer" key="images" text="Image Viewer">
+                                <Carousel class="sapUiContentPadding" loop="true">
+                                    <pages>
+                                        <Image src="./images/screenshots.png" />
+                                        <Image src="./images/screenshots.png" />
+                                        <Image src="./images/screenshots.png" />
+                                        <Image src="./images/screenshots.png" />
+                                    </pages>
+                                </Carousel>
+                            </IconTabFilter>
+                        </items>
+                    </IconTabBar>
+                </content>
+                <footer>
+                    <Toolbar>
+                        <ToolbarSpacer/>
+                    </Toolbar>
+                </footer>
+            </Page>
+        </detailPages>
+    </SplitContainer>
+</core:FragmentDefinition>

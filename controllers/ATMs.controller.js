@@ -9,8 +9,10 @@ sap.ui.define([
     "ipms/atm/app/helpers/Utils",
     "ipms/atm/app/helpers/Urls",
     "ipms/atm/app/helpers/Formatters",
-    "ipms/atm/app/helpers/ATMView/List"
-], function(BaseController, HashChanger, JSONModel, BusyIndicator, MessageBox, MessageToast, Api, Utils, Urls, Formatters, List) {
+    "ipms/atm/app/helpers/ATMView/List",
+    "ipms/atm/app/helpers/ATMView/Map",
+    "ipms/atm/app/helpers/ATMView/Sensors"
+], function(BaseController, HashChanger, JSONModel, BusyIndicator, MessageBox, MessageToast, Api, Utils, Urls, Formatters, List, Map, Sensors) {
     "use strict";
 
     return BaseController.extend("ipms.atm.app.controllers.ATMs", {
@@ -25,6 +27,15 @@ sap.ui.define([
             oThis._router.getRoute("atms").attachMatched(oThis._init, oThis);
             oThis._hashChanger = new HashChanger();
         },
+
+        onAfterRendering: function() {
+            var oThis = this;
+            var oView = oThis.getView();
+            Map.init(oThis);
+        },
+
+        _map: null,
+        _markers: [],
 
         _init: function(oEvent) {
             var oThis = this;
@@ -48,7 +59,7 @@ sap.ui.define([
             oThis.setModel(new JSONModel({
                 "type": params.type,
                 "value": params.value,
-                "view" : "list"
+                "show": "list"
             }), "View");
             List.setModels(oThis);
         },
@@ -116,6 +127,7 @@ sap.ui.define([
                         }
                     });
                     var bankItem = Utils.objectCopy(bank);
+                    bankItem.isPinned = (bankItem.isPinned === "0") ? false : true;
                     bankItem.CRITICAL_COUNT = bankItem.CRITICAL_COUNT.toString();
                     delete bankItem.ticketDetails;
 
@@ -135,8 +147,16 @@ sap.ui.define([
             }), "ATMs");
 
             jQuery.sap.delayedCall(10, oThis, function() {
+                Sensors.setData(oThis);
                 List.setData(oThis, atms[0]);
+                Map.setData(oThis);
             });
+        },
+
+        handleChangeView: function(oEvent) {
+            var oThis = this;
+            var oSource = oEvent.getSource();
+            oThis.setModelData("View", "/show", oSource.data("view"));
         },
 
         filterATMs: function(oEvent) {
@@ -147,11 +167,6 @@ sap.ui.define([
         onATMSelection: function(oEvent) {
             var oThis = this;
             List.selection(oThis, oEvent);
-        },
-
-        onTabChange: function(oEvent) {
-            var oThis = this;
-            List.tabChange(oThis, oEvent);
         },
 
         onCreateATM: function() {
