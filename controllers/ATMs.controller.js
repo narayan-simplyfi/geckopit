@@ -59,7 +59,8 @@ sap.ui.define([
             oThis.setModel(new JSONModel({
                 "type": params.type,
                 "value": params.value,
-                "show": "map"
+                "show": "map",
+                "popPage": "1"
             }), "View");
             List.setModels(oThis);
         },
@@ -121,9 +122,24 @@ sap.ui.define([
                     if (!bank.CRITICAL_COUNT) {
                         bank.CRITICAL_COUNT = 0;
                     }
+                    
+                    if (!bank.ticketsCount) {
+                        bank.ticketsCount = {
+                        	total : 0,
+                        	open: 0,
+                        	critical: 0
+                        };
+                    }
+                    
                     bank.ticketDetails.forEach(function(ticket, tki) {
+						bank.ticketsCount.total++;
                         if ((ticket.TICKET_PRIORITY === "HIGH" || ticket.TICKET_PRIORITY === "High") && (ticket.TICKET_STATUS === "Opened" || ticket.TICKET_STATUS === "OPENED")) {
                             bank.CRITICAL_COUNT++;
+                            bank.ticketsCount.critical++;
+                        }
+                        
+                        if ((ticket.TICKET_STATUS === "Opened" || ticket.TICKET_STATUS === "OPENED")) {
+                            bank.ticketsCount.open++;
                         }
                     });
                     var bankItem = Utils.objectCopy(bank);
@@ -152,7 +168,11 @@ sap.ui.define([
         handleChangeView: function(oEvent) {
             var oThis = this;
             var oSource = oEvent.getSource();
-            oThis.setModelData("View", "/show", oSource.data("view"));
+            var view = oSource.data("view");
+            oThis.setModelData("View", "/show", view);
+            if (view === "list") {
+            	List.refresh(oThis);
+            }
         },
 
         filterATMs: function(oEvent) {
@@ -203,6 +223,31 @@ sap.ui.define([
         onSensorSwitch: function() {
             var oThis = this;
             List.sensorSwitch(oThis);
+        },
+        
+        handleATMPin: function(oEvent) {
+            var oThis = this;
+            var oSource = oEvent.getSource();
+            if (oSource.data('action') === 'pin') {
+            	Map.pin(oThis);	
+            } else {
+        		Map.unpin(oThis);	
+            }
+        },
+        
+        openPinnedDetails: function(oEvent) {
+            var oThis = this;
+        	Map.selectPinned(oThis, oEvent);
+        },
+        
+        handleATMPopNav: function(oEvent) {
+            var oThis = this;
+        	Map.popupNav(oThis, oEvent);
+        },
+        
+        atmPopupGoToTM: function(oEvent) {
+            var oThis = this;
+        	Map.goToTickets(oThis, oEvent);
         }
     });
 });

@@ -72,3 +72,17 @@
 .atms-page-map-pins-single > .sapMFlexItem {
     width: 100%;
 }
+
+.atm-details-popup-page-1-content-sensors-single {
+    width: 86px;
+    text-align: center;
+    float: left;
+}
+
+.atm-details-popup-page-1-content-sensors-single .sapMObjStatusIcon {
+    display: block;
+}
+
+.atm-details-popup-page-1-content-sensors-single .sapMObjStatusText {
+    font-size: 13px;
+}

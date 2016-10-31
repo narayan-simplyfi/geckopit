@@ -1,48 +1,51 @@
-<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:form="sap.ui.layout.form" xmlns:c="sap.ui.commons" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="ipms.atm.app.controllers.ATMs" xmlns:html="http://www.w3.org/1999/xhtml">
-    <Page>
-        <customHeader>
-            <Bar>
-                <contentLeft>
-                    <Button icon="sap-icon://home" type="Transparent" press="handleNavHome" />
-                </contentLeft>
-                <contentMiddle>
-                    <Label text="ATMs - {i18n>title_app}" />
-                </contentMiddle>
-                <contentRight>
-                    <Button icon="sap-icon://person-placeholder" type="Transparent" text="{UserData>/FIRST_NAME} {UserData>/LAST_NAME}" />
-                    <Button icon="sap-icon://log" press="handleLogout" />
-                </contentRight>
-            </Bar>
-        </customHeader>
-        <subHeader>
-            <Bar>
-                <contentLeft>
-                    <Button icon="sap-icon://map-2" text="Map View" type="Transparent" press="handleChangeView" visible="{= ${View>/show} === 'list' }">
-                        <customData>
-                            <core:CustomData key="view" value="map"></core:CustomData>
-                        </customData>
-                    </Button>
-                    <Button icon="sap-icon://screen-split-one" text="List View" type="Transparent" press="handleChangeView" visible="{= ${View>/show} === 'map' }">
-                        <customData>
-                            <core:CustomData key="view" value="list"></core:CustomData>
-                        </customData>
-                    </Button>
-                </contentLeft>
-                <contentMiddle>
-                </contentMiddle>
-                <contentRight>
-                    <Button icon="sap-icon://filter" text="Filters" press="handleShowFilters"/>
-                </contentRight>
-            </Bar>
-        </subHeader>
-        <content>
-            <html:div id="atms-page-map" class="atms-page-map" visible="{= ${View>/show} === 'map' }"></html:div>
-            <VBox class="atms-page-map-pins" items="{ATMs>/data/}" visible="{= ${View>/show} === 'map' }">
-                <HBox class="atms-page-map-pins-single" width="100%" visible="{ATMs>isPinned}">
-                    <Button text="{ATMs>ATM_NAME}" type="Emphasized" press="openPinnedDetails" width="100%"></Button>
-                </HBox>
-            </VBox>
-            <core:Fragment fragmentName="ipms.atm.app.fragments.ATMView.List" type="XML" />
-        </content>
-    </Page>
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:form="sap.ui.layout.form" xmlns:c="sap.ui.commons" xmlns="sap.m"
+	xmlns:l="sap.ui.layout" controllerName="ipms.atm.app.controllers.ATMs" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page>
+		<customHeader>
+			<Bar>
+				<contentLeft>
+					<Button icon="sap-icon://home" type="Transparent" press="handleNavHome"/>
+				</contentLeft>
+				<contentMiddle>
+					<Label text="ATMs - {i18n>title_app}"/>
+				</contentMiddle>
+				<contentRight>
+					<Button icon="sap-icon://person-placeholder" type="Transparent" text="{UserData>/FIRST_NAME} {UserData>/LAST_NAME}"/>
+					<Button icon="sap-icon://log" press="handleLogout"/>
+				</contentRight>
+			</Bar>
+		</customHeader>
+		<subHeader>
+			<Bar>
+				<contentLeft>
+					<Button icon="sap-icon://map-2" text="Map View" type="Transparent" press="handleChangeView" visible="{= ${View>/show} === 'list' }">
+						<customData>
+							<core:CustomData key="view" value="map"></core:CustomData>
+						</customData>
+					</Button>
+					<Button icon="sap-icon://screen-split-one" text="List View" type="Transparent" press="handleChangeView"
+						visible="{= ${View>/show} === 'map' }">
+						<customData>
+							<core:CustomData key="view" value="list"></core:CustomData>
+						</customData>
+					</Button>
+				</contentLeft>
+				<contentMiddle></contentMiddle>
+				<contentRight>
+					<Button icon="sap-icon://filter" text="Filters" press="handleShowFilters"/>
+				</contentRight>
+			</Bar>
+		</subHeader>
+		<content>
+			<html:div id="atms-page-map" class="atms-page-map" visible="{= ${View>/show} === 'map' }"></html:div>
+			<VBox visible="{= ${UserData>/ROLE_NAME} === 'Operator'}">
+				<VBox class="atms-page-map-pins" items="{ATMs>/data/}" visible="{= ${View>/show} === 'map' }">
+					<HBox class="atms-page-map-pins-single" width="100%" visible="{ATMs>isPinned}">
+						<Button text="{ATMs>ATM_NAME}" type="Emphasized" press="openPinnedDetails" width="100%"></Button>
+					</HBox>
+				</VBox>
+			</VBox>
+			<core:Fragment fragmentName="ipms.atm.app.fragments.ATMView.List" type="XML"/>
+		</content>
+	</Page>
 </core:View>

@@ -143,8 +143,8 @@
                                         <items>
                                             <ColumnListItem>
                                                 <cells>
-                                                    <ObjectStatus class="sapUiSmallMarginTop" text="{ path : 'SelectedATM>type', formatter : '.Formatters.sensorText'}" icon="{ path : 'SelectedATM>type', formatter : '.Formatters.sensorIcon'}" />
-                                                    <ObjectStatus class="sapUiSmallMarginTop" text="{SelectedATM>status}" />
+                                                    <ObjectStatus class="sapUiSmallMarginTop" state="{SelectedATM>state}" text="{ path : 'SelectedATM>type', formatter : '.Formatters.sensorText'}" icon="{ path : 'SelectedATM>type', formatter : '.Formatters.sensorIcon'}" />
+                                                    <ObjectStatus class="sapUiSmallMarginTop" state="{SelectedATM>state}" text="{SelectedATM>status}" />
                                                     <Switch customTextOn="On" customTextOff="Off" visible="{SelectedATM>action}" state="{ path : 'SelectedATM>onState' }" change="onSensorSwitch" />
                                                 </cells>
                                             </ColumnListItem>

@@ -1,0 +1,324 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Popover placement="Auto" showHeader="false" contentWidth="400px" contentHeight="600px">
+		<Page id="atm-details-popup-page-main">
+			<customHeader>
+				<Bar>
+					<contentLeft></contentLeft>
+					<contentMiddle>
+						<Label text="{SelectedATM>/data/ATM_NAME} - Details"/>
+					</contentMiddle>
+					<contentRight>
+						<HBox visible="{= ${UserData>/ROLE_NAME} === 'Operator'}">
+							<Button visible="{SelectedATM>/data/isPinned}" type="Reject" icon="sap-icon://pushpin-off" press="handleATMPin">
+								<customData>
+									<core:CustomData key="action" value="unpin"></core:CustomData>
+								</customData>
+							</Button>
+							<Button visible="{= ${SelectedATM>/data/isPinned}.toString() === 'false' }" type="Emphasized" icon="sap-icon://pushpin-off"
+								press="handleATMPin">
+								<customData>
+									<core:CustomData key="action" value="pin"></core:CustomData>
+								</customData>
+							</Button>
+						</HBox>
+					</contentRight>
+				</Bar>
+			</customHeader>
+			<content>
+				<NavContainer id="atm-details-popup-nc" width="100%" height="100%">
+					<Page id="atm-details-popup-page-1" showHeader="false">
+						<content>
+							<Panel width="auto">
+								<headerToolbar>
+									<Toolbar height="3rem">
+										<Title text="Info"/>
+									</Toolbar>
+								</headerToolbar>
+								<content>
+									<VBox class="sapUiTinyMargin">
+										<Title level="h5" text="{SelectedATM>/data/BANK_NAME}"/>
+										<Title level="h6" text="{SelectedATM>/data/AREA_NAME} - {SelectedATM>/data/PINCODE}"/>
+									</VBox>
+								</content>
+							</Panel>
+							<Panel width="auto">
+								<headerToolbar>
+									<Toolbar height="3rem">
+										<Title text="Device"/>
+									</Toolbar>
+								</headerToolbar>
+								<content>
+									<VBox class="sapUiTinyMargin">
+										<Label text="IMEI Number : {SelectedATM>/data/ATM_ID}"/>
+										<Label text="Device ID : {SelectedATM>/data/DEVICEID}"/>
+									</VBox>
+								</content>
+							</Panel>
+							<Panel width="auto" content="{SelectedATM>/data/sensors}">
+								<headerToolbar>
+									<Toolbar height="3rem">
+										<Title text="Sensors"/>
+									</Toolbar>
+								</headerToolbar>
+								<content>
+									<ObjectStatus class="sapUiSmallMarginBottom atm-details-popup-page-1-content-sensors-single" state="{SelectedATM>state}"
+										text="{ path : 'SelectedATM>type', formatter : '.Formatters.sensorText'}"
+										icon="{ path : 'SelectedATM>type', formatter : '.Formatters.sensorIcon'}"/>
+								</content>
+							</Panel>
+						</content>
+						<customData>
+							<core:CustomData key="number" value="1"></core:CustomData>
+						</customData>
+					</Page>
+					<Page id="atm-details-popup-page-2" showHeader="false">
+						<content>
+							<Panel width="auto">
+								<headerToolbar>
+									<Toolbar height="3rem">
+										<Title text="ATM Feed"/>
+									</Toolbar>
+								</headerToolbar>
+								<content>
+									<html:div id="atm-details-popup-page-2-video"/>
+								</content>
+							</Panel>
+							<Panel width="auto">
+								<headerToolbar>
+									<Toolbar height="3rem">
+										<Title text="Snapshots"/>
+									</Toolbar>
+								</headerToolbar>
+								<content>
+									<Carousel class="sapUiContentPadding" loop="true">
+										<pages>
+											<Image src="https://documentc918f143b.ap1.hana.ondemand.com/document/rest/download?DocId=pZ_VQ7jzy0AHdsrmAiZ18i1_-dRIBibmsW0g1S87P7w"
+												press="showCarousel"/>
+											<Image src="https://documentc918f143b.ap1.hana.ondemand.com/document/rest/download?DocId=NobE99s2x0MvdTBQdO8xITS3uYqmF9f8iQNlB5a_BlU"
+												press="showCarousel"/>
+											<Image src="https://documentc918f143b.ap1.hana.ondemand.com/document/rest/download?DocId=GQgvL9G-7ddw8GzKI555LkB4rdutcT-b_IPUaGwjkSA"
+												press="showCarousel"/>
+											<Image src="https://documentc918f143b.ap1.hana.ondemand.com/document/rest/download?DocId=n41KgQFZJx_3uNxiZoX65SrqNMJhPK-O0AS38WYSl4c"
+												press="showCarousel"/>
+											<Image src="https://documentc918f143b.ap1.hana.ondemand.com/document/rest/download?DocId=SKdqKKf_eoSbxWfaLlNrRGAgs9w8oXgbo_0FGV5-icI"
+												press="showCarousel"/>
+										</pages>
+									</Carousel>
+								</content>
+							</Panel>
+						</content>
+						<customData>
+							<core:CustomData key="number" value="2"></core:CustomData>
+						</customData>
+					</Page>
+					<Page id="atm-details-popup-page-3" showHeader="false">
+						<content>
+							<Panel width="auto">
+								<headerToolbar>
+									<Toolbar height="3rem">
+										<Title text="Tickets"/>
+										<ToolbarSpacer/>
+										<Button text="Create" type="Emphasized"/>
+									</Toolbar>
+								</headerToolbar>
+								<content>
+									<FlexBox direction="Column" alignItems="Start">
+										<FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop sapUiContentPadding">
+											<items>
+												<Text text="Total Tickets"></Text>
+												<Link text="{SelectedATM>/data/ticketsCount/total}" press="atmPopupGoToTM">
+													<customData>
+														<core:CustomData key="type" value=""/>
+														<core:CustomData key="value" value=""/>
+													</customData>
+												</Link>
+											</items>
+										</FlexBox>
+										<FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiContentPadding">
+											<items>
+												<Text text="Status Open Tickets"></Text>
+												<Link text="{SelectedATM>/data/ticketsCount/open}" press="atmPopupGoToTM">
+													<customData>
+														<core:CustomData key="type" value="status"/>
+														<core:CustomData key="value" value="open"/>
+													</customData>
+												</Link>
+											</items>
+										</FlexBox>
+										<FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiContentPadding">
+											<items>
+												<Text text="Priority High Tickets"></Text>
+												<Link text="{SelectedATM>/data/ticketsCount/critical}" press="atmPopupGoToTM">
+													<customData>
+														<core:CustomData key="type" value="priority"/>
+														<core:CustomData key="value" value="critical"/>
+													</customData>
+												</Link>
+											</items>
+										</FlexBox>
+									</FlexBox>
+								</content>
+							</Panel>
+						</content>
+						<customData>
+							<core:CustomData key="number" value="3"></core:CustomData>
+						</customData>
+					</Page>
+					<Page id="atm-details-popup-page-4" showHeader="false">
+						<content>
+							<Panel width="auto">
+								<headerToolbar>
+									<Toolbar height="3rem">
+										<Title text="Emergency Contact"/>
+									</Toolbar>
+								</headerToolbar>
+								<content>
+									<FlexBox direction="Column" alignItems="Start">
+										<FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop sapUiContentPadding">
+											<items>
+												<Link text="{SelectedATM>/data/CONTACT_PERSON1}" press="handleLinkPress">
+													<customData>
+														<core:CustomData key="type" value="email"></core:CustomData>
+														<core:CustomData key="value" value="{SelectedATM>/data/CONTACT_EMAIL1}"></core:CustomData>
+													</customData>
+												</Link>
+												<Link text="{SelectedATM>/data/CONTACT_NO1}" press="handleLinkPress">
+													<customData>
+														<core:CustomData key="type" value="phone"></core:CustomData>
+														<core:CustomData key="value" value="{SelectedATM>/data/CONTACT_NO1}"></core:CustomData>
+													</customData>
+												</Link>
+											</items>
+										</FlexBox>
+										<FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiContentPadding">
+											<items>
+												<Link text="{SelectedATM>/data/CONTACT_PERSON2}" press="handleLinkPress">
+													<customData>
+														<core:CustomData key="type" value="email"></core:CustomData>
+														<core:CustomData key="value" value="{SelectedATM>/data/CONTACT_EMAIL2}"></core:CustomData>
+													</customData>
+												</Link>
+												<Link text="{SelectedATM>/data/CONTACT_NO2}" press="handleLinkPress">
+													<customData>
+														<core:CustomData key="type" value="phone"></core:CustomData>
+														<core:CustomData key="value" value="{SelectedATM>/data/CONTACT_NO2}"></core:CustomData>
+													</customData>
+												</Link>
+											</items>
+										</FlexBox>
+										<FlexBox alignItems="Start" justifyContent="SpaceBetween" width="100%" class="sapUiContentPadding">
+											<items>
+												<Link text="{SelectedATM>/data/CONTACT_PERSON3}" press="handleLinkPress">
+													<customData>
+														<core:CustomData key="type" value="email"></core:CustomData>
+														<core:CustomData key="value" value="{SelectedATM>/data/CONTACT_EMAIL3}"></core:CustomData>
+													</customData>
+												</Link>
+												<Link text="{SelectedATM>/data/CONTACT_NO3}" press="handleLinkPress">
+													<customData>
+														<core:CustomData key="type" value="phone"></core:CustomData>
+														<core:CustomData key="value" value="{SelectedATM>/data/CONTACT_NO3}"></core:CustomData>
+													</customData>
+												</Link>
+											</items>
+										</FlexBox>
+									</FlexBox>
+								</content>
+							</Panel>
+						</content>
+						<customData>
+							<core:CustomData key="number" value="4"></core:CustomData>
+						</customData>
+					</Page>
+					<Page id="atm-details-popup-page-5" showHeader="false">
+						<content>
+							<Panel width="auto">
+								<headerToolbar>
+									<Toolbar height="3rem">
+										<Title text="Help"/>
+									</Toolbar>
+								</headerToolbar>
+								<content>
+									<FlexBox alignItems="Start" justifyContent="Start">
+										<items>
+											<Button icon="sap-icon://pushpin-off" type="Emphasized" class="sapUiSmallMarginEnd"/>
+											<Label text="Pin To Dashboard" class="sapUiSmallMarginTop"/>
+										</items>
+									</FlexBox>
+									<FlexBox alignItems="Start" justifyContent="Start">
+										<items>
+											<Button icon="sap-icon://pushpin-off" type="Reject" class="sapUiSmallMarginEnd"/>
+											<Label text="Unpin from Dashboard" class="sapUiSmallMarginTop"/>
+										</items>
+									</FlexBox>
+									<FlexBox alignItems="Start" justifyContent="Start">
+										<items>
+											<Button icon="sap-icon://it-host" class="sapUiSmallMarginEnd"/>
+											<Label text="Details" class="sapUiSmallMarginTop"/>
+										</items>
+									</FlexBox>
+									<FlexBox alignItems="Start" justifyContent="Start">
+										<items>
+											<Button icon="sap-icon://video" class="sapUiSmallMarginEnd"/>
+											<Label text="ATM Feed" class="sapUiSmallMarginTop"/>
+										</items>
+									</FlexBox>
+									<FlexBox alignItems="Start" justifyContent="Start">
+										<items>
+											<Button icon="sap-icon://customer-order-entry" class="sapUiSmallMarginEnd"/>
+											<Label text="Tickets" class="sapUiSmallMarginTop"/>
+										</items>
+									</FlexBox>
+									<FlexBox alignItems="Start" justifyContent="Start">
+										<items>
+											<Button icon="sap-icon://phone" class="sapUiSmallMarginEnd"/>
+											<Label text="Emergency Contact" class="sapUiSmallMarginTop"/>
+										</items>
+									</FlexBox>
+								</content>
+							</Panel>
+						</content>
+						<customData>
+							<core:CustomData key="number" value="5"></core:CustomData>
+						</customData>
+					</Page>
+				</NavContainer>
+			</content>
+			<footer>
+				<Toolbar>
+					<ToolbarSpacer/>
+					<Button icon="sap-icon://it-host" press="handleATMPopNav" type="{= ${View>/popPage} === '1' ? 'Emphasized' : 'Default' }">
+						<customData>
+							<core:CustomData key="page" value="atm-details-popup-page-1"></core:CustomData>
+							<core:CustomData key="number" value="1"></core:CustomData>
+						</customData>
+					</Button>
+					<Button icon="sap-icon://video" press="handleATMPopNav" type="{= ${View>/popPage} === '2' ? 'Emphasized' : 'Default' }">
+						<customData>
+							<core:CustomData key="page" value="atm-details-popup-page-2"></core:CustomData>
+							<core:CustomData key="number" value="2"></core:CustomData>
+						</customData>
+					</Button>
+					<Button icon="sap-icon://customer-order-entry" press="handleATMPopNav" type="{= ${View>/popPage} === '3' ? 'Emphasized' : 'Default' }">
+						<customData>
+							<core:CustomData key="page" value="atm-details-popup-page-3"></core:CustomData>
+							<core:CustomData key="number" value="3"></core:CustomData>
+						</customData>
+					</Button>
+					<Button icon="sap-icon://phone" press="handleATMPopNav" type="{= ${View>/popPage} === '4' ? 'Emphasized' : 'Default' }">
+						<customData>
+							<core:CustomData key="page" value="atm-details-popup-page-4"></core:CustomData>
+							<core:CustomData key="number" value="4"></core:CustomData>
+						</customData>
+					</Button>
+					<Button icon="sap-icon://sys-help" press="handleATMPopNav" type="{= ${View>/popPage} === '5' ? 'Emphasized' : 'Default' }">
+						<customData>
+							<core:CustomData key="page" value="atm-details-popup-page-5"></core:CustomData>
+							<core:CustomData key="number" value="5"></core:CustomData>
+						</customData>
+					</Button>
+				</Toolbar>
+			</footer>
+		</Page>
+	</Popover>
+</core:FragmentDefinition>
