@@ -152,6 +152,10 @@ sap.ui.define([
             });
 
             oThis.setModelData('TicketCreate', '/all_atms', atms);
+            
+             if (type === "create") {
+             	oThis.onCreateTicket();
+             }
         },
 
         filterTickets: function(oEvent) {
@@ -257,10 +261,16 @@ sap.ui.define([
             oThis.oTicketsAction.close();
         },
 
-        onCreateTicket: function(oEvent) {
+        onCreateTicket: function() {
             var oThis = this;
             var oView = oThis.getView();
-            oThis.setModelData('TicketCreate', '/atm', '');
+            var type = oThis.getModelData("View", "/type");
+            var value = oThis.getModelData("View", "/value");
+            if (type === "create") {
+            	oThis.setModelData('TicketCreate', '/atm', value);
+            } else {
+	            oThis.setModelData('TicketCreate', '/atm', '');
+            }
             oThis.setModelData('TicketCreate', '/priority', 'HIGH');
             oThis.setModelData('TicketCreate', '/subject', '');
             oThis.setModelData('TicketCreate', '/comments', '');

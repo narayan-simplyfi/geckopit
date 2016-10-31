@@ -118,7 +118,12 @@
 									<Toolbar height="3rem">
 										<Title text="Tickets"/>
 										<ToolbarSpacer/>
-										<Button text="Create" type="Emphasized"/>
+										<Button text="Create" type="Emphasized" press="atmPopupGoToTM">
+											<customData>
+												<core:CustomData key="type" value="create"/>
+												<core:CustomData key="value" value="{SelectedATM>/data/ATM_ID}"/>
+											</customData>
+										</Button>
 									</Toolbar>
 								</headerToolbar>
 								<content>
