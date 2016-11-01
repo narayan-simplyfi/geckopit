@@ -36,6 +36,7 @@
 				</contentMiddle>
 				<contentRight>
 					<Button icon="sap-icon://filter" text="Filters" press="handleShowFilters"/>
+					<CheckBox text="Auto Refresh" selected="{View>/auto_refresh}" select="handleAutoRefresh" />
 				</contentRight>
 			</Bar>
 		</subHeader>

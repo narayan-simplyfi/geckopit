@@ -63,7 +63,8 @@ sap.ui.define([
 				"type": params.type,
 				"value": params.value,
 				"show": "map",
-				"popPage": "1"
+				"popPage": "1",
+				"auto_refresh": true
 			}), "View");
 
 			oThis.setModel(new JSONModel({
@@ -90,6 +91,12 @@ sap.ui.define([
 			var oThis = this;
 			var oView = oThis.getView();
 			var oComponent = oThis.getOwnerComponent();
+
+			if (!oThis._refreshPollFlag) {
+				return;
+			}
+			
+			oThis._refreshPollFlag = false;
 
 			var id = oComponent.getModel('UserData').getData().USER_ID;
 			var role_name = oComponent.getModel('UserData').getData().ROLE_NAME;
@@ -270,13 +277,49 @@ sap.ui.define([
 			}), "ATMs");
 			List.setData(oThis);
 			Map.setData(oThis);
-			
+
 			var oView = oThis.getView();
 			var oPinned = oView.byId("atms-page-map-pins");
 			if (oPinned) {
 				oPinned.rerender();
 			}
-			
+
+			oThis._refreshPollFlag = true;
+
+			var selected = oThis.getModelData("View", "/auto_refresh");
+
+			if (selected) {
+				oThis._refreshStart();
+			}
+
+		},
+
+		_refreshPoll: null,
+		_refreshPollFlag: true,
+
+		handleAutoRefresh: function(oEvent) {
+			var oThis = this;
+			var selected = oThis.getModelData("View", "/auto_refresh");
+			if (selected) {
+				oThis._refreshStart();
+			} else {
+				oThis._refreshStop();
+			}
+		},
+
+		_refreshStart: function() {
+			var oThis = this;
+			if (oThis._refreshPoll) {
+				oThis._refreshStop();
+			}
+			oThis._refreshPoll = setInterval(function() {
+				oThis._getData();
+			}, 45000);
+		},
+
+		_refreshStop: function() {
+			var oThis = this;
+			clearInterval(oThis._refreshPoll);
 		},
 
 		handleShowFilters: function() {
@@ -288,12 +331,12 @@ sap.ui.define([
 			}
 			var backUpData = Utils.objectCopy(oThis.getModelData('ATMFilters', '/'));
 			oThis.setModel(new JSONModel(backUpData), 'ATMFiltersBackUp');
-			oThis._oATMFilters.open();			
+			oThis._oATMFilters.open();
 		},
-		
+
 		applyFilters: function() {
 			var oThis = this;
-			oThis.filterData();	
+			oThis.filterData();
 			oThis._oATMFilters.close();
 		},
 
@@ -325,7 +368,7 @@ sap.ui.define([
 			var originalFiltersData = Utils.objectCopy(oThis.getModelData('ATMFiltersBackUp', '/'));
 			oThis.setModelData('ATMFilters', '/', originalFiltersData);
 			oThis._oATMFilters.close();
-		},		
+		},
 
 		handleStatusFilterChange: function(oEvent) {
 			var oThis = this;
@@ -349,7 +392,7 @@ sap.ui.define([
 			}
 			oThis.setModelData("ATMFilters", "/status", status);
 		},
-		
+
 		handleBankFilterChange: function(oEvent) {
 			var oThis = this;
 			var banks = oThis.getModelData("ATMFilters", "/banks");
