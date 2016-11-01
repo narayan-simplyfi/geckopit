@@ -314,7 +314,7 @@ sap.ui.define([
 			}
 			oThis._refreshPoll = setInterval(function() {
 				oThis._getData();
-			}, 45000);
+			}, 30000);
 		},
 
 		_refreshStop: function() {
