@@ -133,8 +133,9 @@
 												<Text text="Total Tickets"></Text>
 												<Link text="{SelectedATM>/data/ticketsCount/total}" press="atmPopupGoToTM">
 													<customData>
-														<core:CustomData key="type" value=""/>
-														<core:CustomData key="value" value=""/>
+														<core:CustomData key="type" value="-"/>
+														<core:CustomData key="value" value="-"/>
+														<core:CustomData key="atm" value="{SelectedATM>/data/ATM_ID}"/>
 													</customData>
 												</Link>
 											</items>
@@ -146,6 +147,7 @@
 													<customData>
 														<core:CustomData key="type" value="status"/>
 														<core:CustomData key="value" value="open"/>
+														<core:CustomData key="atm" value="{SelectedATM>/data/ATM_ID}"/>
 													</customData>
 												</Link>
 											</items>
@@ -157,6 +159,7 @@
 													<customData>
 														<core:CustomData key="type" value="priority"/>
 														<core:CustomData key="value" value="critical"/>
+														<core:CustomData key="atm" value="{SelectedATM>/data/ATM_ID}"/>
 													</customData>
 												</Link>
 											</items>

@@ -62,7 +62,7 @@ sap.ui.define([
 			oThis.setModel(new JSONModel({
 				"type": params.type,
 				"value": params.value,
-				"show": "list",
+				"show": "map",
 				"popPage": "1"
 			}), "View");
 

@@ -207,6 +207,7 @@ sap.ui.define([
         var params = {};
         params.type = data.type;
         params.value = data.value;
+        params.atm = data.atm;
         oThis.route("ticket-management", params);
 	};
 

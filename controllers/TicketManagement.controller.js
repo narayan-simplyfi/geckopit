@@ -50,7 +50,8 @@ sap.ui.define([
             var oThis = this;
             oThis.setModel(new JSONModel({
                 "type": params.type,
-                "value": params.value
+                "value": params.value,
+                "atm": params.atm
             }), "View");
             oThis.setModel(new JSONModel({
                 "action": null,
@@ -115,7 +116,8 @@ sap.ui.define([
 
             var type = oThis.getModelData("View", "/type");
             var value = oThis.getModelData("View", "/value");
-
+            var atm = oThis.getModelData("View", "/atm");
+            
             var data = Utils.objectCopy(oComponent.getModel('atmData').getData());
             var atms = [];
             var tickets = [];
@@ -127,7 +129,19 @@ sap.ui.define([
                         "name": bank.ATM_NAME
                     });
                     bank.ticketDetails.forEach(function(ticket, tki) {
-                        if (type === "status" && value === "open") {
+                        if (type === "status" && value === "open" && atm) {
+                            if ( (ticket.TICKET_STATUS === "Opened" || ticket.TICKET_STATUS === "OPENED") && ticket.ATM_ID === atm) {
+                                tickets.push(ticket);
+                            }
+                        } else if (type === "priority" && value === "critical" && atm) {
+                            if ( ((ticket.TICKET_PRIORITY === "HIGH" || ticket.TICKET_PRIORITY === "High") && (ticket.TICKET_STATUS === "Opened" || ticket.TICKET_STATUS === "OPENED")) && ticket.ATM_ID === atm ) {
+                                tickets.push(ticket);
+                            }
+                        } else if (type === "-" && value === "-" && atm) {
+                        	 if (ticket.ATM_ID === atm) {
+                                tickets.push(ticket);
+                            }
+                        } else if (type === "status" && value === "open") {
                             if (ticket.TICKET_STATUS === "Opened" || ticket.TICKET_STATUS === "OPENED") {
                                 tickets.push(ticket);
                             }
@@ -187,6 +201,13 @@ sap.ui.define([
 
         _setSelectedTicket: function(data, path) {
             var oThis = this;
+            if (!data) {
+	            oThis.setModel(new JSONModel({
+	                "data": [],
+	                "path": null
+	            }), 'SelectedTicket');     
+	            return;
+            }
             data.CREATED = Formatters.date("dd MMM, yyyy hh:mm:ss", data.CREATED);
             data.MODIFIED = Formatters.date("dd MMM, yyyy hh:mm:ss", data.MODIFIED);
             oThis.setModel(new JSONModel({

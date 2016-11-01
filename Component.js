@@ -43,7 +43,7 @@ sap.ui.define([
 					name: "atms",
 					target: "atms"
 				}, {
-					pattern: "ticket-management/:type:/:value:",
+					pattern: "ticket-management/:type:/:value:/:atm:",
 					name: "ticket-management",
 					target: "ticketManagement"
 				}, {
