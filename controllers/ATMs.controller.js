@@ -270,6 +270,13 @@ sap.ui.define([
 			}), "ATMs");
 			List.setData(oThis);
 			Map.setData(oThis);
+			
+			var oView = oThis.getView();
+			var oPinned = oView.byId("atms-page-map-pins");
+			if (oPinned) {
+				oPinned.rerender();
+			}
+			
 		},
 
 		handleShowFilters: function() {

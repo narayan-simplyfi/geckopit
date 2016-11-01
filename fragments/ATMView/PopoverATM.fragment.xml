@@ -244,13 +244,13 @@
 									</Toolbar>
 								</headerToolbar>
 								<content>
-									<FlexBox alignItems="Start" justifyContent="Start">
+									<FlexBox alignItems="Start" justifyContent="Start" visible="{= ${UserData>/ROLE_NAME} === 'Operator'}">
 										<items>
 											<Button icon="sap-icon://pushpin-off" type="Emphasized" class="sapUiSmallMarginEnd"/>
 											<Label text="Pin To Dashboard" class="sapUiSmallMarginTop"/>
 										</items>
 									</FlexBox>
-									<FlexBox alignItems="Start" justifyContent="Start">
+									<FlexBox alignItems="Start" justifyContent="Start" visible="{= ${UserData>/ROLE_NAME} === 'Operator'}">
 										<items>
 											<Button icon="sap-icon://pushpin-off" type="Reject" class="sapUiSmallMarginEnd"/>
 											<Label text="Unpin from Dashboard" class="sapUiSmallMarginTop"/>
