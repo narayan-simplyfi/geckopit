@@ -71,6 +71,11 @@ sap.ui.define([
 	var refresh = function(oThis) {
 		var oView = oThis.getView();
 		var oList = oView.byId("atms-list");
+		
+		if (!oThis.getModel("SelectedATM")) {
+			return;
+		}
+		
 		var path = oThis.getModelData("SelectedATM", "/path");
 		var index = path.substr(path.lastIndexOf("/") + 1, path.length);
 		oList.setSelectedItem(oList.getItems()[index]);

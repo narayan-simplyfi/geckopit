@@ -2,11 +2,11 @@
     <SplitContainer visible="{= ${View>/show} === 'list' }" id="atms-split-container" initialDetail="atms-details-page" initialMaster="atms-list-page">
         <masterPages>
             <Page showHeader="false" title="ATMs" id="atms-list-page">
-                <subHeader>
-                    <Toolbar>
-                        <Label text="ATMs ({ATMs>/searched_length} / {ATMs>/data/length})" />
-                    </Toolbar>
-                </subHeader>
+                <!--<subHeader>-->
+                <!--    <Toolbar>-->
+                <!--        <Label text="ATMs ({ATMs>/searched_length} / {ATMs>/data/length})" />-->
+                <!--    </Toolbar>-->
+                <!--</subHeader>-->
                 <content>
                     <Toolbar>
                         <SearchField id="atms-list-filter" liveChange="filterATMs" width="100%" />

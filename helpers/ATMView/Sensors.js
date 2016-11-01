@@ -4,14 +4,17 @@ sap.ui.define([
 	"ipms/atm/app/helpers/Utils",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
-	"sap/ui/core/BusyIndicator",
-	"ipms/atm/app/helpers/ATMView/List",
-	"ipms/atm/app/helpers/ATMView/Map"
-], function(Urls, Api, Utils, JSONModel, MessageBox, BusyIndicator, List, Map) {
+	"sap/ui/core/BusyIndicator"
+], function(Urls, Api, Utils, JSONModel, MessageBox, BusyIndicator) {
 	"use strict";
 
 	var setData = function(oThis) {
 		var atms = oThis.getModelData("ATMs", "/data/");
+		
+		if (atms.length === 0) {
+			return;
+		}
+		
 		BusyIndicator.show(0);
 		atms.forEach(function(atm, index) {
 			_fetchData(oThis, index);
@@ -32,8 +35,7 @@ sap.ui.define([
 					oThis.setModelData("ATMs", "/data/" + index + "/hasSensorData", true);
 					if (oThis.getModelData("ATMs", "/data/length") === (index + 1)) {
 						jQuery.sap.delayedCall(10, oThis, function() {
-							List.setData(oThis);
-							Map.setData(oThis);
+							oThis.filterData();
 							BusyIndicator.hide();
 						});
 					}
@@ -44,8 +46,7 @@ sap.ui.define([
 					oThis.setModelData("ATMs", "/data/" + index + "/sensors", []);
 					if (oThis.getModelData("ATMs", "/data/length") === (index + 1)) {
 						jQuery.sap.delayedCall(10, oThis, function() {
-							List.setData(oThis);
-							Map.setData(oThis);
+							oThis.filterData();
 							BusyIndicator.hide();
 						});
 					}
@@ -59,8 +60,7 @@ sap.ui.define([
 				oThis.setModelData("ATMs", "/data/" + index + "/sensors", []);
 				if (oThis.getModelData("ATMs", "/data/length") === (index + 1)) {
 					jQuery.sap.delayedCall(10, oThis, function() {
-						List.setData(oThis);
-						Map.setData(oThis);
+						oThis.filterData();
 						BusyIndicator.hide();
 					});
 				}

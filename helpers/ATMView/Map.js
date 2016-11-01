@@ -28,6 +28,9 @@ sap.ui.define([
 
 	var setCenter = function(oThis) {
 		var data = oThis.getModelData("ATMs", "/data/0");
+		if (!data) {
+			return;
+		}
 		var center = new google.maps.LatLng(data.LATITUDE, data.LONGITUDE);
 		oThis._map.panTo(center);
 	};

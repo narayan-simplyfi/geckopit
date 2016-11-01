@@ -189,27 +189,181 @@ sap.ui.define([
 				});
 			});
 
-			var finalBankFilters = [{
-				"name": "All",
-				"key": "",
-				"selected": true
-			}];
-			banksFilter.forEach(function(bank, index) {
-				finalBankFilters.push({
-					"name": bank,
-					"key": bank,
-					"selected": false
-				});
-			});
+			if (!oThis.getModel("ATMFilters") || ((banksFilter.length + 1) !== (oThis.getModelData("ATMFilters", "/banks/length")))) {
+				var finalBankFilters = [{
+					"name": "All",
+					"key": "",
+					"selected": true
+				}];
 
-			oThis.setModelData("ATMFilters", "/banks", finalBankFilters);
+				banksFilter.forEach(function(bank, index) {
+					finalBankFilters.push({
+						"name": bank,
+						"key": bank,
+						"selected": false
+					});
+				});
+				oThis.setModelData("ATMFilters", "/banks", finalBankFilters);
+			}
 
 			oThis.setModel(new JSONModel({
 				"data": atms,
 				"searched_length": atms.length
 			}), "ATMs");
 
+			oThis.setModel(new JSONModel({
+				"data": atms,
+				"searched_length": atms.length
+			}), "AllATMs");
+
 			Sensors.setData(oThis);
+		},
+
+		filterData: function() {
+			var oThis = this;
+			var status = oThis.getModelData("ATMFilters", "/status");
+			var banks = oThis.getModelData("ATMFilters", "/banks");
+
+			var atms = Utils.objectCopy(oThis.getModelData("AllATMs", "/data"));
+			var filteredATMS = [];
+
+			var statusFilters = [];
+			var banksFilters = [];
+
+			status.forEach(function(single, index) {
+				if (single.selected && (single.key !== "")) {
+					statusFilters.push(single.key);
+				}
+			});
+
+			banks.forEach(function(bank, index) {
+				if (bank.selected && (bank.key !== "")) {
+					banksFilters.push(bank.key);
+				}
+			});
+
+			if (statusFilters.length === 0 && banksFilters.length === 0) {
+				filteredATMS = atms;
+			} else if (statusFilters.length !== 0 && banksFilters.length === 0) {
+				atms.forEach(function(atm, index) {
+					if (statusFilters.indexOf(atm.sensor_status) !== -1) {
+						filteredATMS.push(atm);
+					}
+				});
+			} else if (statusFilters.length === 0 && banksFilters.length !== 0) {
+				atms.forEach(function(atm, index) {
+					if (banksFilters.indexOf(atm.BANK_NAME) !== -1) {
+						filteredATMS.push(atm);
+					}
+				});
+			} else {
+				atms.forEach(function(atm, index) {
+					if (statusFilters.indexOf(atm.sensor_status) !== -1 && banksFilters.indexOf(atm.BANK_NAME) !== -1) {
+						filteredATMS.push(atm);
+					}
+				});
+			}
+
+			oThis.setModel(new JSONModel({
+				"data": filteredATMS,
+				"searched_length": filteredATMS.length
+			}), "ATMs");
+			List.setData(oThis);
+			Map.setData(oThis);
+		},
+
+		handleShowFilters: function() {
+			var oThis = this;
+			var oView = oThis.getView();
+			if (!oThis._oATMFilters) {
+				oThis._oATMFilters = sap.ui.xmlfragment("ipms.atm.app.fragments.ATMView.Filters", oThis);
+				oView.addDependent(oThis._oATMFilters);
+			}
+			var backUpData = Utils.objectCopy(oThis.getModelData('ATMFilters', '/'));
+			oThis.setModel(new JSONModel(backUpData), 'ATMFiltersBackUp');
+			oThis._oATMFilters.open();			
+		},
+		
+		applyFilters: function() {
+			var oThis = this;
+			oThis.filterData();	
+			oThis._oATMFilters.close();
+		},
+
+		clearFilters: function() {
+			var oThis = this;
+			var status = oThis.getModelData("ATMFilters", "/status");
+			var banks = oThis.getModelData("ATMFilters", "/banks");
+			status.forEach(function(single, index) {
+				if (single.name === "All") {
+					single.selected = true;
+				} else {
+					single.selected = false;
+				}
+			});
+			banks.forEach(function(bank, index) {
+				if (bank.name === "All") {
+					bank.selected = true;
+				} else {
+					bank.selected = false;
+				}
+			});
+			oThis.setModelData("ATMFilters", "/status", status);
+			oThis.setModelData("ATMFilters", "/banks", banks);
+			oThis.applyFilters();
+		},
+
+		closeFilters: function() {
+			var oThis = this;
+			var originalFiltersData = Utils.objectCopy(oThis.getModelData('ATMFiltersBackUp', '/'));
+			oThis.setModelData('ATMFilters', '/', originalFiltersData);
+			oThis._oATMFilters.close();
+		},		
+
+		handleStatusFilterChange: function(oEvent) {
+			var oThis = this;
+			var status = oThis.getModelData("ATMFilters", "/status");
+			var id = oEvent.getParameter("id");
+			var selected = oEvent.getParameter("selected");
+			var oCheckbox = sap.ui.getCore().byId(id);
+			var text = oCheckbox.getText();
+			if (selected && text === "All") {
+				status.forEach(function(single, index) {
+					if (single.name !== "All") {
+						single.selected = false;
+					}
+				});
+			} else {
+				status.forEach(function(single, index) {
+					if (single.name === "All") {
+						single.selected = false;
+					}
+				});
+			}
+			oThis.setModelData("ATMFilters", "/status", status);
+		},
+		
+		handleBankFilterChange: function(oEvent) {
+			var oThis = this;
+			var banks = oThis.getModelData("ATMFilters", "/banks");
+			var id = oEvent.getParameter("id");
+			var selected = oEvent.getParameter("selected");
+			var oCheckbox = sap.ui.getCore().byId(id);
+			var text = oCheckbox.getText();
+			if (selected && text === "All") {
+				banks.forEach(function(bank, index) {
+					if (bank.name !== "All") {
+						bank.selected = false;
+					}
+				});
+			} else {
+				banks.forEach(function(bank, index) {
+					if (bank.name === "All") {
+						bank.selected = false;
+					}
+				});
+			}
+			oThis.setModelData("ATMFilters", "/banks", banks);
 		},
 
 		handleChangeView: function(oEvent) {
@@ -295,126 +449,6 @@ sap.ui.define([
 		atmPopupGoToTM: function(oEvent) {
 			var oThis = this;
 			Map.goToTickets(oThis, oEvent);
-		},
-
-		handleShowFilters: function(oEvent) {
-			var oThis = this;
-			var oView = oThis.getView();
-			if (!oThis._oATMFilters) {
-				oThis._oATMFilters = sap.ui.xmlfragment("ipms.atm.app.fragments.ATMView.Filters", oThis);
-				oView.addDependent(oThis._oATMFilters);
-			}
-			var backUpData = Utils.objectCopy(oThis.getModelData('ATMFilters', '/'));
-			oThis.setModel(new JSONModel(backUpData), 'ATMFiltersBackUp');
-			oThis._oATMFilters.open();
-		},
-
-		applyFilters: function() {
-			var oThis = this;
-			var oView = oThis.getView();
-			var oList = oView.byId("atms-list").getBinding("items");
-
-			var status = oThis.getModelData("ATMFilters", "/status");
-			var banks = oThis.getModelData("ATMFilters", "/banks");
-
-			var statusFilters = [];
-			var banksFilters = [];
-
-			status.forEach(function(single, indexs) {
-				if (single.selected) {
-					statusFilters.push(new Filter("sensor_status", "Contains", single.key));
-				}
-			});
-
-			banks.forEach(function(bank, indexs) {
-				if (bank.selected) {
-					banksFilters.push(new Filter("BANK_NAME", "Contains", bank.key));
-				}
-			});
-
-			var aFilters = new Filter(statusFilters.concat(banksFilters));
-
-			oList.filter(aFilters, "Application");
-
-			oThis.setModelData('ATMs', '/searched_length', oList.iLength);
-
-			oThis._oATMFilters.close();
-		},
-
-		clearFilters: function() {
-			var oThis = this;
-			var status = oThis.getModelData("ATMFilters", "/status");
-			var banks = oThis.getModelData("ATMFilters", "/banks");
-			status.forEach(function(single, indexs) {
-				if (single.name === "All") {
-					single.selected = true;
-				} else {
-					single.selected = false;
-				}
-			});
-			banks.forEach(function(bank, indexb) {
-				if (bank.name === "All") {
-					bank.selected = true;
-				} else {
-					bank.selected = false;
-				}
-			});
-			oThis.setModelData("ATMFilters", "/status", status);
-			oThis.setModelData("ATMFilters", "/banks", banks);
-			oThis.applyFilters();
-		},
-
-		closeFilters: function() {
-			var oThis = this;
-			var originalFiltersData = Utils.objectCopy(oThis.getModelData('ATMFiltersBackUp', '/'));
-			oThis.setModelData('ATMFilters', '/', originalFiltersData);
-			oThis._oATMFilters.close();
-		},
-
-		handleStatusFilterChange: function(oEvent) {
-			var oThis = this;
-			var status = oThis.getModelData("ATMFilters", "/status");
-			var id = oEvent.getParameter("id");
-			var selected = oEvent.getParameter("selected");
-			var oCheckbox = sap.ui.getCore().byId(id);
-			var text = oCheckbox.getText();
-			if (selected && text === "All") {
-				status.forEach(function(single, index) {
-					if (single.name !== "All") {
-						single.selected = false;
-					}
-				});
-			} else {
-				status.forEach(function(single, index) {
-					if (single.name === "All") {
-						single.selected = false;
-					}
-				});
-			}
-			oThis.setModelData("ATMFilters", "/status", status);
-		},
-
-		handleBankFilterChange: function(oEvent) {
-			var oThis = this;
-			var banks = oThis.getModelData("ATMFilters", "/banks");
-			var id = oEvent.getParameter("id");
-			var selected = oEvent.getParameter("selected");
-			var oCheckbox = sap.ui.getCore().byId(id);
-			var text = oCheckbox.getText();
-			if (selected && text === "All") {
-				banks.forEach(function(bank, index) {
-					if (bank.name !== "All") {
-						bank.selected = false;
-					}
-				});
-			} else {
-				banks.forEach(function(bank, index) {
-					if (bank.name === "All") {
-						bank.selected = false;
-					}
-				});
-			}
-			oThis.setModelData("ATMFilters", "/banks", banks);
 		}
 	});
 });

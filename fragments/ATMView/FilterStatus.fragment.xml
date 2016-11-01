@@ -7,17 +7,11 @@
                     <CheckBox class="sapUiTinyMarginBegin atm-filters-status-checkbox" text="{ATMFilters>name}" selected="{ATMFilters>selected}" select="handleStatusFilterChange" />
                 </VBox>
             </VBox>
-            <VBox class="sapUiSmallMarginBegin">
-                <Label class="sapUiSmallMarginTop sapUiSmallTinyBottom" text="{i18n>filters_dialog_label_banks}" design="Bold" />
-                <VBox items="{ATMFilters>/banks/}">
-                    <CheckBox class="sapUiTinyMarginBegin atm-filters-bank-checkbox" text="{ATMFilters>name}" selected="{ATMFilters>selected}" select="handleBankFilterChange" />
-                </VBox>
-            </VBox>
         </content>
         <buttons>
-            <Button text="{i18n>filters_dialog_button_go}" press="applyFilters" type="Emphasized" />
-            <Button text="{i18n>filters_dialog_button_clear}" press="clearFilters"  />
-            <Button text="{i18n>filters_dialog_button_close}" press="closeFilters" />
+            <Button text="{i18n>filters_dialog_button_go}" press="applyStatusFilters" type="Emphasized" />
+            <Button text="{i18n>filters_dialog_button_clear}" press="clearStatusFilters"  />
+            <Button text="{i18n>filters_dialog_button_close}" press="closeStatusFilters" />
         </buttons>
     </Dialog>
 </core:FragmentDefinition>

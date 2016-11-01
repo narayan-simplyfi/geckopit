@@ -29,8 +29,13 @@
 							<core:CustomData key="view" value="list"></core:CustomData>
 						</customData>
 					</Button>
+					<!--<Button icon="sap-icon://filter" text="Status" press="handleShowStatusFilter"/>-->
+					<!--<Button icon="sap-icon://filter" text="Banks" press="handleShowBankFilter"/>-->
 				</contentLeft>
-				<contentMiddle></contentMiddle>
+				<contentMiddle>
+					<Label text="ATMs ({ATMs>/searched_length} / {ATMs>/data/length})"  visible="{= ${View>/show} === 'list' }"/>
+					<Label text="ATMs ({ATMs>/data/length})" visible="{= ${View>/show} === 'map' }" />
+				</contentMiddle>
 				<contentRight>
 					<Button icon="sap-icon://filter" text="Filters" press="handleShowFilters"/>
 				</contentRight>
