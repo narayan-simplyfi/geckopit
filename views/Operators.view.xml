@@ -30,7 +30,7 @@
                             <ScrollContainer class="operators-list-sc" horizontal="false" vertical="true" focusable="true">
                                 <List id="operators-list" items="{Operators>/data/}" mode="SingleSelectMaster" selectionChange="onOperatorSelection">
                                     <items>
-                                        <StandardListItem visible="{Operators>isCritical}" description="Tickets: {Operators>tickets/length}" title="{Operators>operatorName}" type="Navigation" />
+                                        <StandardListItem description="Tickets: {Operators>tickets/length}" title="{Operators>operatorName}" type="Navigation" />
                                     </items>
                                 </List>
                             </ScrollContainer>
@@ -48,7 +48,7 @@
                             <ObjectHeader class="operators-details-header" title="{SelectedOperator>/data/operatorName}" number="{SelectedOperator>/data/operatorId}" numberUnit="{SelectedOperator>/data/operatorRole} ID">
                                 <attributes>
                                     <ObjectAttribute text="{SelectedOperator>/data/operatorRole}" />
-                                    <ObjectAttribute active="true" text="{SelectedOperator>/data/atmsCount} Assigned ATMs" />
+                                    <ObjectAttribute text="{SelectedOperator>/data/atmsCount} Assigned ATMs" />
                                     <ObjectAttribute active="true" text="{SelectedOperator>/data/operatorPhone}" press="handleLinkPress">
                                         <customData>
                                             <core:CustomData key="type" value="phone"></core:CustomData>

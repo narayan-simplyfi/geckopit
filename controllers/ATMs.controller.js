@@ -64,7 +64,8 @@ sap.ui.define([
 				"value": params.value,
 				"show": "map",
 				"popPage": "1",
-				"auto_refresh": true
+				"auto_refresh": true,
+				"auto_refresh_time" : 30000
 			}), "View");
 
 			oThis.setModel(new JSONModel({
@@ -183,6 +184,13 @@ sap.ui.define([
 					});
 					var bankItem = Utils.objectCopy(bank);
 					bankItem.isPinned = (bankItem.isPinned === "0") ? false : true;
+					
+					if (bankItem.CRITICAL_COUNT > 0) {
+						bankItem.bank_status = "critical";
+					} else {
+						bankItem.bank_status = "low";
+					}
+					
 					bankItem.CRITICAL_COUNT = bankItem.CRITICAL_COUNT.toString();
 					delete bankItem.ticketDetails;
 
@@ -253,7 +261,7 @@ sap.ui.define([
 				filteredATMS = atms;
 			} else if (statusFilters.length !== 0 && banksFilters.length === 0) {
 				atms.forEach(function(atm, index) {
-					if (statusFilters.indexOf(atm.sensor_status) !== -1) {
+					if (statusFilters.indexOf(atm.bank_status) !== -1) {
 						filteredATMS.push(atm);
 					}
 				});
@@ -265,7 +273,7 @@ sap.ui.define([
 				});
 			} else {
 				atms.forEach(function(atm, index) {
-					if (statusFilters.indexOf(atm.sensor_status) !== -1 && banksFilters.indexOf(atm.BANK_NAME) !== -1) {
+					if (statusFilters.indexOf(atm.bank_status) !== -1 && banksFilters.indexOf(atm.BANK_NAME) !== -1) {
 						filteredATMS.push(atm);
 					}
 				});
@@ -275,6 +283,7 @@ sap.ui.define([
 				"data": filteredATMS,
 				"searched_length": filteredATMS.length
 			}), "ATMs");
+			
 			List.setData(oThis);
 			Map.setData(oThis);
 
@@ -314,7 +323,7 @@ sap.ui.define([
 			}
 			oThis._refreshPoll = setInterval(function() {
 				oThis._getData();
-			}, 30000);
+			}, oThis.getModelData("View", "/auto_refresh_time"));
 		},
 
 		_refreshStop: function() {

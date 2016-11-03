@@ -14,7 +14,7 @@ sap.ui.define([
 		var mapDom = oView.byId("atms-page-map").getDomRef();
 		var mapOptions = {
 			center: new google.maps.LatLng(0, 0),
-			zoom: 15,
+			zoom: 6,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 		oThis._map = new google.maps.Map(mapDom, mapOptions);
@@ -44,7 +44,7 @@ sap.ui.define([
 			var img = "./images/";
 			var color = "G";
 
-			switch (atm.sensor_status) {
+			switch (atm.bank_status) {
 				case 'low':
 					// if (banks.indexOf(atm.BANK_ID) !== -1)
 					color = "G";
