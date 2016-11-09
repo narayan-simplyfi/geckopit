@@ -65,7 +65,8 @@ sap.ui.define([
 				"show": "map",
 				"popPage": "1",
 				"auto_refresh": true,
-				"auto_refresh_time" : 30000
+				"auto_refresh_time" : 30000,
+				"bankIds" : []
 			}), "View");
 
 			oThis.setModel(new JSONModel({
@@ -151,11 +152,17 @@ sap.ui.define([
 			var atms = [];
 
 			var banksFilter = [];
+			
+			var bankIds = [];
 
 			data.forEach(function(operator, opi) {
 				operator.BANKS.forEach(function(bank, bki) {
 					if (!bank.CRITICAL_COUNT) {
 						bank.CRITICAL_COUNT = 0;
+					}
+					
+					if (bankIds.indexOf(bank.ATM_ID) === -1) {
+						bankIds.push(bank.ATM_ID);
 					}
 
 					if (!bank.ticketsCount) {
@@ -230,7 +237,9 @@ sap.ui.define([
 				"data": atms,
 				"searched_length": atms.length
 			}), "AllATMs");
-
+			
+			oThis.setModelData("View", "/bankIds", bankIds);
+			
 			Sensors.setData(oThis);
 		},
 

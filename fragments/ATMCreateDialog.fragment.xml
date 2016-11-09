@@ -6,7 +6,7 @@
                     <content>
                         <form:SimpleForm>
                             <Label class="sapUiSmallMarginTop" text="ATM ID" />
-                            <Input type="Text" value="{ATM>/atmId}" valueLiveUpdate="true" />
+                            <Input id="create-atm-id-input" type="Text" value="{ATM>/atmId}" valueLiveUpdate="true" />
                             <Label class="sapUiSmallMarginTop" text="ATM Name" />
                             <Input type="Text" value="{ATM>/atmName}" valueLiveUpdate="true" />
                             <Label class="sapUiSmallMarginTop" text="Operator" />

@@ -71,11 +71,11 @@ sap.ui.define([
 	var refresh = function(oThis) {
 		var oView = oThis.getView();
 		var oList = oView.byId("atms-list");
-		
+
 		if (!oThis.getModel("SelectedATM")) {
 			return;
 		}
-		
+
 		var path = oThis.getModelData("SelectedATM", "/path");
 		var index = path.substr(path.lastIndexOf("/") + 1, path.length);
 		oList.setSelectedItem(oList.getItems()[index]);
@@ -180,7 +180,17 @@ sap.ui.define([
 	var goToPage2 = function(oThis) {
 		var oCore = sap.ui.getCore();
 		var oNavContainer = oCore.byId("create-atm-nc");
-		oNavContainer.to(oCore.byId("create-atm-page-2"));
+		var data = Utils.objectCopy(oThis.getModelData("View", "/bankIds"));
+		var enteredId = oThis.getModelData("ATM", "/atmId");
+		var oInput = oCore.byId('create-atm-id-input');
+		if (data.indexOf(enteredId) === -1) {
+			oInput.setValueState("None");
+			oInput.setValueStateText("");
+			oNavContainer.to(oCore.byId("create-atm-page-2"));
+		} else {
+			oInput.setValueState("Error");
+			oInput.setValueStateText("ATM ID already exists!");
+		}
 	};
 
 	var goToPage3 = function(oThis) {
