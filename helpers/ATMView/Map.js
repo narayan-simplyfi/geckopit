@@ -97,7 +97,7 @@ sap.ui.define([
 			img,
 			new google.maps.Size(64, 64),
 			new google.maps.Point(0, 0),
-			new google.maps.Point(48, 32)
+			new google.maps.Point(0, 32)
 		);
 		icon.url += '#' + atm.ATM_ID + "-Details";
 		var marker = new google.maps.Marker({
@@ -143,7 +143,7 @@ sap.ui.define([
 				img,
 				new google.maps.Size(64, 64),
 				new google.maps.Point(0, 0),
-				new google.maps.Point(48, 32)
+				new google.maps.Point(0, 32)
 			);
 			icon.url += '#' + atm.ATM_ID;
 			var marker = new google.maps.Marker({

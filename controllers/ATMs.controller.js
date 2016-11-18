@@ -69,9 +69,9 @@ sap.ui.define([
 			oThis.setModel(new JSONModel({
 				"type": params.type,
 				"value": params.value,
-				"show": "list",
+				"show": "map",
 				"popPage": "1",
-				"auto_refresh": false,
+				"auto_refresh": true,
 				"auto_refresh_time" : 30000,
 				"bankIds" : []
 			}), "View");

@@ -67,7 +67,7 @@ sap.ui.define([
 			}), "TicketCreate");
 		},
 
-		_getData: function() {
+		_getData: function(flag) {
 			var oThis = this;
 			var oView = oThis.getView();
 			var oComponent = oThis.getOwnerComponent();
@@ -101,7 +101,7 @@ sap.ui.define([
 					var data = (d || d.result) ? d.result : [];
 					oComponent.setModel(new JSONModel(data), "atmData");
 					jQuery.sap.delayedCall(10, oThis, function() {
-						oThis._setData();
+						oThis._setData(flag);
 					});
 				})
 				.fail(function(d) {
@@ -112,7 +112,7 @@ sap.ui.define([
 				});
 		},
 
-		_setData: function() {
+		_setData: function(flag) {
 			var oThis = this;
 			var oView = oThis.getView();
 			var oComponent = oThis.getOwnerComponent();
@@ -131,7 +131,9 @@ sap.ui.define([
 				operator.BANKS.forEach(function(bank, bki) {
 					atms.push({
 						"id": bank.ATM_ID,
-						"name": bank.ATM_NAME
+						"name": bank.ATM_NAME,
+						"deviceid": bank.DEVICEID,
+						"operatorId": operator.operatorId
 					});
 					bank.ticketDetails.forEach(function(ticket, tki) {
 						if (ticket_id && ticket_id !== "") {
@@ -192,7 +194,15 @@ sap.ui.define([
 			oThis.setModelData('TicketCreate', '/all_atms', atms);
 
 			if (type === "create") {
-				oThis.onCreateTicket();
+				if (flag) {
+					var params = {};
+					params.type = "";
+					params.value = "";
+					params.atm = "";
+					oThis.route("ticket-management", params);
+				} else {
+					oThis.onCreateTicket();
+				}
 			}
 		},
 
@@ -311,11 +321,6 @@ sap.ui.define([
 			var oView = oThis.getView();
 			var type = oThis.getModelData("View", "/type");
 			var value = oThis.getModelData("View", "/value");
-			if (type === "create") {
-				oThis.setModelData('TicketCreate', '/atm', value);
-			} else {
-				oThis.setModelData('TicketCreate', '/atm', '');
-			}
 			oThis.setModelData('TicketCreate', '/priority', 'HIGH');
 			oThis.setModelData('TicketCreate', '/subject', '');
 			oThis.setModelData('TicketCreate', '/comments', '');
@@ -323,7 +328,164 @@ sap.ui.define([
 				oThis.oTicketCreate = sap.ui.xmlfragment("ipms.atm.app.fragments.TicketCreateDialog", oThis);
 				oView.addDependent(oThis.oTicketCreate);
 			}
-			oThis.oTicketCreate.open();
+
+			if (type === "create") {
+				oThis.setModelData('TicketCreate', '/atm', value);
+				oThis.getComments();
+			} else {
+				oThis.setModelData('TicketCreate', '/atm', '');
+				oThis.oTicketCreate.open();
+			}
+		},
+
+		getComments: function() {
+			var oThis = this;
+			var atmId = oThis.getModelData("View", "/value");
+			var allAtms = oThis.getModelData('TicketCreate', '/all_atms');
+			var deviceId = null;
+			allAtms.forEach(function(atm, index) {
+				if (atm.id === atmId) {
+					deviceId = atm.deviceid;
+				}
+			});
+			if (deviceId) {
+				oThis._fetchSensorData(deviceId)
+					.done(function(msg) {
+						var issues = msg.split("\n");
+						var count = issues.length;
+						if (count === 1) {
+							oThis.setModelData('TicketCreate', '/subject', atmId + ": " + issues[0]);
+						} else if (count > 1) {
+							oThis.setModelData('TicketCreate', '/subject', atmId + ": " + count + " Issues Found");
+						}
+						oThis.setModelData('TicketCreate', '/comments', msg);
+					})
+					.fail(function(msg) {})
+					.always(function() {
+						oThis.oTicketCreate.open();
+					});
+			} else {
+				oThis.oTicketCreate.open();
+			}
+		},
+
+		_fetchSensorData: function(device_id) {
+			var oThis = this;
+			var def = jQuery.Deferred();
+			BusyIndicator.show(0);
+			var oComponent = oThis.getOwnerComponent();
+			var oData = oComponent.getModel("IoT");
+			oData.read("/app.svc/IPMS_SENSOR.T_IOT_1F0D3E4EB8C68DF7577E?$top=1&$filter=G_DEVICE eq '" + device_id + "'", null, null,
+				false,
+				function(d) {
+					if (d.results.length > 0) {
+						oThis._generateComment(d.results)
+							.done(function(msg) {
+								def.resolve(msg);
+							})
+							.fail(function(msg) {
+								def.reject(msg);
+							});
+					} else {
+						def.reject(-1);
+						MessageToast.show("No sensor data found for this ATM");
+					}
+					BusyIndicator.hide();
+				},
+				function(d) {
+					def.reject(-1);
+					MessageToast.show(oThis.getI18nText('message_error_failed_to_fetch_data'));
+					BusyIndicator.hide();
+				}
+			);
+			return def.promise();
+		},
+
+		_generateComment: function(data) {
+			var def = jQuery.Deferred();
+			var msg = "";
+			var sensors = data[0];
+			for (var i in sensors) {
+				switch (i) {
+					case 'C_VIBRATION':
+						msg += (sensors[i]['C_VIBRATION'] == 0) ? "" : "Possible vibration on ATM machine \n";
+						break;
+					case 'C_TEMPERATURE':
+						msg += sensors[i]['C_TEMPERATURE'] >= 18 && sensors[i]['C_TEMPERATURE'] <= 22 ? "" : "Temperature is not normal \n";
+						break;
+					case 'Contact':
+						msg += "";
+						break;
+					case 'Motion':
+						msg += "";
+						break;
+					case 'C_PIR':
+						msg += (sensors[i]['C_PIR'] == 0) ? "" : "Person intrusion detected \n";
+						break;
+					case 'C_DOOR1':
+						msg += (sensors[i]['C_DOOR1'] == 0) ? "" : "Back door 1 is open \n";
+						break;
+					case 'C_DOOR2':
+						msg += (sensors[i]['C_DOOR2'] == 0) ? "" : "Back door 2 is open \n";
+						break;
+					case 'C_SMOKE':
+						msg += (sensors[i]['C_SMOKE'] == 0) ? "" : "Possible smoke in ATM \n";
+						break;
+					case 'C_POWERVALUE':
+						msg += (sensors[i]['C_POWERVALUE'] >= 6 && sensors[i]['C_POWERVALUE'] <= 10) ? "" : "Power is critical \n";
+						break;
+					case 'C_VOLTAGEVALUE':
+						msg += (sensors[i]['C_VOLTAGEVALUE'] >= 180 && sensors[i]['C_VOLTAGEVALUE'] <= 240) ? "" : "Voltage is not normal \n";
+						break;
+					case 'C_PANICBUTTON':
+						msg += (sensors[i]['C_PANICBUTTON'] == 0) ? "" : "Panic button pressed \n";
+						break;
+					case 'C_AC1':
+						msg += (sensors[i]['C_AC1'] == 0) ? "AC 1 is off \n" : "";
+						break;
+					case 'C_AC2':
+						msg += (sensors[i]['C_AC2'] == 0) ? "AC 2 is off \n" : "";
+						break;
+					case 'C_ALARM':
+						msg += (sensors[i]['C_ALARM'] == 0) ? "" : "Alarm raised \n";
+						break;
+					case 'C_RFID':
+						msg += "";
+						break;
+					case 'C_POWERSTATUS':
+						msg += (sensors[i]['C_POWERSTATUS'] == 0) ? "Power is off \n" : "";
+						break;
+					case 'C_CURRENTVALUE':
+						msg += (sensors[i]['C_CURRENTVALUE'] >= 8 && sensors[i]['C_CURRENTVALUE'] <= 10) ? "" : "Current value is not normal \n";
+						break;
+					case 'C_SPEAKER':
+						msg += (sensors[i]['C_SPEAKER'] == 0) ? "Speaker not working \n" : "";
+						break;
+					case 'C_CAMERA1STATUS':
+						msg += (sensors[i]['C_CAMERA1STATUS'] == 0) ? "Camera 1 not working \n" : "";
+						break;
+					case 'C_CAMERA2STATUS':
+						msg += (sensors[i]['C_CAMERA2STATUS'] == 0) ? "Camera 2 not working \n" : "";
+						break;
+					case 'C_CAMERA3STATUS':
+						msg += (sensors[i]['C_CAMERA3STATUS'] == 0) ? "Camera 3 not working \n" : "";
+						break;
+					case 'C_CAMERA4STATUS':
+						msg += (sensors[i]['C_CAMERA4STATUS'] == 0) ? "Camera 4 not working \n" : "";
+						break;
+					case 'C_LIGHT':
+						msg += (sensors[i]['C_LIGHT'] == 0) ? "Light not working \n" : "";
+						break;
+					case 'C_CONTROLBOX':
+						msg += (sensors[i]['C_CONTROLBOX'] == 0) ? "Control box not working \n" : "";
+						break;
+					default:
+						break;
+				}
+			}
+			def.resolve(msg);
+
+			return def.promise();
 		},
 
 		onSubmitTicketCreate: function(oEvent) {
@@ -337,10 +499,20 @@ sap.ui.define([
 			text += " at (" + Formatters.date("dd MMM, YYYY hh:mm:ss", new Date()) + ") :";
 			text += "\n" + oThis.getModelData('TicketCreate', '/comments');
 
+			var atmId = ticketData.atm;
+			var allAtms = oThis.getModelData('TicketCreate', '/all_atms');
+			var operatorId;
+			
+			allAtms.forEach(function(atm, index) {
+				if (atm.id === atmId) {
+					operatorId = Number(atm.operatorId);
+				}
+			});
+			
 			var data = {
 				"action": "createTicket",
 				"ticketDetails": {
-					"TICKET_TO": userData.USER_ID,
+					"TICKET_TO": operatorId,
 					"TICKET_SUBJECT": ticketData.subject,
 					"TICKET_DESCRIPTION": text,
 					"TICKET_STATUS": "OPENED",
@@ -357,8 +529,8 @@ sap.ui.define([
 					if (d.result && d.result[0] && d.result[0].STATUS_MSG) {
 						MessageToast.show(d.result[0].STATUS_MSG);
 						if (d.result[0].STATUS_CODE === "201") {
-							oThis._getData();
 							oThis.oTicketCreate.close();
+							oThis._getData(true);
 						}
 					}
 				})

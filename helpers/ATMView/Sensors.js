@@ -115,13 +115,11 @@ sap.ui.define([
 					_setSensorsData(oThis, d.results, top);
 					_setSensorsStatus(oThis, d.results, top);
 					oThis.setModelData("SelectedATM", "/data/hasSensorData", true);
-					BusyIndicator.hide();
 				} else {
 					oThis.setModelData("SelectedATM", "/data/hasSensorData", false);
 					oThis.setModelData("SelectedATM", "/data/sensor_status", "low");
 					oThis.setModelData("SelectedATM", "/data/date", "");
 					oThis.setModelData("SelectedATM", "/data/sensors", []);
-					BusyIndicator.hide();
 					MessageToast.show("No sensor data found for this ATM");
 				}
 				BusyIndicator.hide();
@@ -171,19 +169,13 @@ sap.ui.define([
 			state: (data['C_PIR'] == 0) ? "Success" : "Error",
 			trend: []
 		}, {
-			type: "door",
-			status: (data['C_POWERSTATUS']) ? data['C_POWERSTATUS'] : 'None',
-			action: false,
-			state: (data['C_POWERSTATUS'] == 0) ? "Success" : "Error",
-			trend: []
-		}, {
-			type: "battery1",
+			type: "door1",
 			status: (data['C_DOOR1']) ? data['C_DOOR1'] : 'None',
 			action: false,
 			state: (data['C_DOOR1'] == 0) ? "Success" : "Error",
 			trend: []
 		}, {
-			type: "battery2",
+			type: "door2",
 			status: (data['C_DOOR2']) ? data['C_DOOR2'] : 'None',
 			action: false,
 			state: (data['C_DOOR2'] == 0) ? "Success" : "Error",
@@ -221,7 +213,7 @@ sap.ui.define([
 			trend: []
 		}, {
 			type: "AC2",
-			status: (data['C_AC2']) ? data['C_AC1'] : 'None',
+			status: (data['C_AC2']) ? data['C_AC2'] : 'None',
 			action: true,
 			state: (data['C_AC2'] == 0) ? "Error" : "Success",
 			onState: (data['C_AC2'] == "1") ? true : false,
@@ -243,7 +235,7 @@ sap.ui.define([
 			type: "powerstatus",
 			status: (data['C_POWERSTATUS']) ? data['C_POWERSTATUS'] : 'None',
 			action: false,
-			state: (data['C_POWERSTATUS'] == 0) ? "Success" : "Error",
+			state: (data['C_POWERSTATUS'] == 0) ? "Error" : "Success",
 			trend: []
 		}, {
 			type: "currentvalue",
@@ -329,19 +321,13 @@ sap.ui.define([
 								color: (allData[i]['C_PIR'] == 0) ? "Good" : "Error"
 							});
 							break;
-						case 'door':
-							sensor.trend.push({
-								value: (allData[i]['C_POWERSTATUS']) ? Number(allData[i]['C_POWERSTATUS']) : 0,
-								color: (allData[i]['C_POWERSTATUS'] == 0) ? "Good" : "Error"
-							});
-							break;
-						case 'battery1':
+						case 'door1':
 							sensor.trend.push({
 								value: (allData[i]['C_DOOR1']) ? Number(allData[i]['C_DOOR1']) : 0,
 								color: (allData[i]['C_DOOR1'] == 0) ? "Good" : "Error"
 							});
 							break;
-						case 'battery2':
+						case 'door2':
 							sensor.trend.push({
 								value: (allData[i]['C_DOOR2']) ? Number(allData[i]['C_DOOR2']) : 0,
 								color: (allData[i]['C_DOOR2'] == 0) ? "Good" : "Error"
@@ -398,7 +384,7 @@ sap.ui.define([
 						case 'powerstatus':
 							sensor.trend.push({
 								value: (allData[i]['C_POWERSTATUS']) ? Number(allData[i]['C_POWERSTATUS']) : 0,
-								color: (allData[i]['C_POWERSTATUS'] == 0) ? "Good" : "Error"
+								color: (allData[i]['C_POWERSTATUS'] == 0) ? "Error" : "Good"
 							});
 							break;
 						case 'currentvalue':

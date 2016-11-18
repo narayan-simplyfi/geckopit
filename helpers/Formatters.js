@@ -81,7 +81,8 @@ sap.ui.define([], function() {
             case "pid":
                 icon += "physical-activity";
                 break;
-            case "door":
+            case "door1":
+            case "door2":
                 icon += "visits";
                 break;
             case "battery1":
@@ -163,8 +164,11 @@ sap.ui.define([], function() {
             case "pid":
                 text = "PID";
                 break;
-            case "door":
-                text = "Door";
+            case "door1":
+                text = "Door 1";
+                break;
+            case "door2":
+                text = "Door 2";
                 break;
             case "battery1":
                 text = "Battery 1";
