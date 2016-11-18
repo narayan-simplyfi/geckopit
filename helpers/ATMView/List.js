@@ -6,8 +6,9 @@ sap.ui.define([
 	"ipms/atm/app/helpers/Api",
 	"ipms/atm/app/helpers/Utils",
 	"ipms/atm/app/helpers/Urls",
-	"ipms/atm/app/helpers/ATMView/Map"
-], function(JSONModel, BusyIndicator, MessageToast, Filter, Api, Utils, Urls, Map) {
+	"ipms/atm/app/helpers/ATMView/Map",
+	"ipms/atm/app/helpers/ATMView/Sensors"
+], function(JSONModel, BusyIndicator, MessageToast, Filter, Api, Utils, Urls, Map, Sensors) {
 	"use strict";
 
 	var init = function(oThis) {
@@ -328,6 +329,13 @@ sap.ui.define([
 			});
 	};
 
+    var tabChange = function(oThis, oEvent) {
+        var sKey = oEvent.getParameter("key");
+        if (sKey === "sensors") {
+	        Sensors.fetchData(oThis, 11);                         
+        }
+    };
+
 	return {
 		init: init,
 		setModels: setModels,
@@ -344,6 +352,7 @@ sap.ui.define([
 		goBackToPage2: goBackToPage2,
 		goBackToPage3: goBackToPage3,
 		create: create,
+		tabChange:tabChange,
 		sensorSwitch: sensorSwitch
 	};
 });

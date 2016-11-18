@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
-    <Dialog title="Create Ticket" contentWidth="250px" design="Bold">
+    <Dialog title="Create Ticket" contentWidth="450px" design="Bold">
         <content>
             <form:SimpleForm editable="true">
                 <Label text="ATM" />
@@ -17,7 +17,7 @@
                 <Label text="Subject" />
                 <Input type="Text" value="{TicketCreate>/subject}" valueLiveUpdate="true" />
                 <Label text="Comments" />
-                <TextArea value="{TicketCreate>/comments}" valueLiveUpdate="true" />
+                <TextArea value="{TicketCreate>/comments}" valueLiveUpdate="true" height="140px" />
             </form:SimpleForm>
         </content>
         <buttons>

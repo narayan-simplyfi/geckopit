@@ -69,9 +69,9 @@ sap.ui.define([
 			oThis.setModel(new JSONModel({
 				"type": params.type,
 				"value": params.value,
-				"show": "map",
+				"show": "list",
 				"popPage": "1",
-				"auto_refresh": true,
+				"auto_refresh": false,
 				"auto_refresh_time" : 30000,
 				"bankIds" : []
 			}), "View");
@@ -247,7 +247,8 @@ sap.ui.define([
 			
 			oThis.setModelData("View", "/bankIds", bankIds);
 			
-			Sensors.setData(oThis);
+			// Sensors.setData(oThis);
+			oThis.filterData();
 		},
 
 		filterData: function() {
@@ -454,6 +455,11 @@ sap.ui.define([
 				List.refresh(oThis);
 			}
 		},
+		
+        onTabChange: function(oEvent) {
+            var oThis = this;
+            List.tabChange(oThis, oEvent);
+        },
 
 		filterATMs: function(oEvent) {
 			var oThis = this;

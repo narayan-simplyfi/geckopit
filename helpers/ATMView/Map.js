@@ -5,8 +5,9 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
 	"sap/m/MessageToast",
-	"sap/ui/core/BusyIndicator"
-], function(Urls, Api, Utils, JSONModel, MessageBox, MessageToast, BusyIndicator) {
+	"sap/ui/core/BusyIndicator",
+	"ipms/atm/app/helpers/ATMView/Sensors"
+], function(Urls, Api, Utils, JSONModel, MessageBox, MessageToast, BusyIndicator, Sensors) {
 	"use strict";
 
 	var init = function(oThis) {
@@ -171,6 +172,7 @@ sap.ui.define([
 				"path": "/data/" + index
 			}), 'SelectedATM');
 			showDetails(oThis, dom);
+	        Sensors.fetchData(oThis, 1);   
 		});
 	};
 
