@@ -1,4 +1,4 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:html="http://www.w3.org/1999/xhtml">
     <SplitContainer visible="{= ${View>/show} === 'list' }" id="atms-split-container" initialDetail="atms-details-page" initialMaster="atms-list-page">
         <masterPages>
             <Page showHeader="false" title="ATMs" id="atms-list-page">
@@ -42,13 +42,20 @@
         <detailPages>
             <Page showHeader="false" title="Details" id="atms-details-page" class="atms-details-page">
                 <content>
-                    <IconTabBar id="atm-details-ictb" expanded="true" expandable="false" class="sapUiLargeMarginTop sapUiResponsiveContentPadding" stretchContentHeight="true" backgroundDesign="Translucent" select="onTabChange">
+                	<html:div id="atms-page-detail-map" class="atms-page-detail-map"></html:div>
+                    <IconTabBar id="atm-details-ictb" expanded="true" expandable="false" class="atm-details-ictb sapUiResponsiveContentPadding" stretchContentHeight="true" backgroundDesign="Translucent" select="onTabChange">
                         <items>
                             <IconTabFilter icon="sap-icon://hint" key="info" text="Info">
                                 <ObjectHeader title="{SelectedATM>/data/ATM_NAME}" number="{SelectedATM>/data/ATM_ID}" numberUnit="ATM ID">
                                     <attributes>
                                         <ObjectAttribute text="Bank : {SelectedATM>/data/BANK_NAME}" />
                                         <ObjectAttribute text="Area : {SelectedATM>/data/AREA_NAME} - {SelectedATM>/data/PINCODE}" />
+                                        <ObjectAttribute text="Create Ticket" active="true" press="atmPopupGoToTM">
+											<customData>
+												<core:CustomData key="type" value="create"/>
+												<core:CustomData key="value" value="{SelectedATM>/data/ATM_ID}"/>
+											</customData>
+										</ObjectAttribute>
                                     </attributes>
                                 </ObjectHeader>
                                 <Panel width="auto">
@@ -110,7 +117,7 @@
                                         </form:SimpleForm>
                                     </content>
                                 </Panel>
-                                <Panel width="auto">
+                                <!--<Panel width="auto">
                                     <headerToolbar>
                                         <Toolbar height="3rem">
                                             <Title text="Location Details" />
@@ -124,9 +131,9 @@
                                             <Text text="{SelectedATM>/data/LONGITUDE}" />
                                         </form:SimpleForm>
                                     </content>
-                                </Panel>
+                                </Panel>-->
                             </IconTabFilter>
-                            <IconTabFilter icon="sap-icon://radar-chart" key="sensors" text="Sensors" count="{SelectedATM>/data/sensors/length}">
+                            <IconTabFilter icon="sap-icon://radar-chart" key="sensors" text="Sensors">
                                 <ScrollContainer class="atm-sensors-list-sc" horizontal="false" vertical="true" focusable="true" busy="{SelectedATM>/data/loading}" busyIndicatorDelay="0">
                                     <Table inset="false" items="{ path: 'SelectedATM>/data/sensors/' }">
                                         <columns>

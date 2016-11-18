@@ -2,7 +2,7 @@
     <Dialog title="Create ATM" contentWidth="800px" design="Bold">
         <content>
             <NavContainer id="create-atm-nc" height="700px" class="navContainerControl">
-                <Page id="create-atm-page-1" title="Basic Details (1/3)">
+                <Page id="create-atm-page-1" title="Basic Details (1/4)">
                     <content>
                         <form:SimpleForm>
                             <Label class="sapUiSmallMarginTop" text="ATM ID" />
@@ -10,19 +10,19 @@
                             <Label class="sapUiSmallMarginTop" text="ATM Name" />
                             <Input type="Text" value="{ATM>/atmName}" valueLiveUpdate="true" />
                             <Label class="sapUiSmallMarginTop" text="Operator" />
-                            <Select selectedKey="{ATM>/userid}" items="{ path: 'ATMCreateHelpers>/users/' }">
+                            <ComboBox selectedKey="{ATM>/userid}" items="{ path: 'ATMCreateHelpers>/users/' }">
                                 <core:Item key="{ATMCreateHelpers>userId}" text="{ATMCreateHelpers>userFirstname} {ATMCreateHelpers>userLastname}" />
-                            </Select>
+                            </ComboBox>
                             <Label class="sapUiSmallMarginTop" text="Bank" />
-                            <Select selectedKey="{ATM>/bankId}" items="{ path: 'ATMCreateHelpers>/banks/' }">
+                            <ComboBox selectedKey="{ATM>/bankId}" items="{ path: 'ATMCreateHelpers>/banks/' }">
                                 <core:Item key="{ATMCreateHelpers>bankId}" text="{ATMCreateHelpers>bankName}" />
-                            </Select>
+                            </ComboBox>
                             <Label class="sapUiSmallMarginTop" text="Area" />
                             <Input type="Text" value="{ATM>/areaName}" valueLiveUpdate="true" />
                             <Label class="sapUiSmallMarginTop" text="City" />
-                            <Select selectedKey="{ATM>/cityId}" items="{ path: 'ATMCreateHelpers>/cities/' }">
+                            <ComboBox selectedKey="{ATM>/cityId}" items="{ path: 'ATMCreateHelpers>/cities/' }">
                                 <core:Item key="{ATMCreateHelpers>cityId}" text="{ATMCreateHelpers>cityName}" />
-                            </Select>
+                            </ComboBox>
                             <Label class="sapUiSmallMarginTop" text="Pincode" />
                             <Input type="Text" value="{ATM>/pincode}" valueLiveUpdate="true" />
                             <Label class="sapUiSmallMarginTop" text="Latitude" />
@@ -39,7 +39,7 @@
                         </Toolbar>
                     </footer>
                 </Page>
-                <Page id="create-atm-page-2" title="Contact Info (2/3)" showNavButton="true" navButtonPress="goBackToCreateATMPage1">
+                <Page id="create-atm-page-2" title="Contact Info (2/4)" showNavButton="true" navButtonPress="goBackToCreateATMPage1">
                     <content>
                         <form:SimpleForm editable="true" title="Contact Person 1">
                             <Label text="Name" />
@@ -74,7 +74,7 @@
                         </Toolbar>
                     </footer>
                 </Page>
-                <Page id="create-atm-page-3" title="Sensor Info (3/3)" showNavButton="true" navButtonPress="goBackToCreateATMPage2">
+                <Page id="create-atm-page-3" title="Sensor Info (3/4)" showNavButton="true" navButtonPress="goBackToCreateATMPage2">
                     <content>
                         <form:SimpleForm editable="true">
                             <Label text="Device ID" />
@@ -95,7 +95,76 @@
                         <Toolbar>
                             <ToolbarSpacer />
                             <Button text="Cancel" press="onCancelCreateATM" />
-                            <Button enabled="{ parts:[ {path:'ATM>/deviceid'},{path:'ATM>/brandName'},{path:'ATM>/ipAddress'},{path:'ATM>/installationDate'} ], formatter:'.Formatters.createATMPage3' }" text="Create ATM" press="submitCreateATM" type="Emphasized" />
+                            <Button enabled="{ parts:[ {path:'ATM>/deviceid'},{path:'ATM>/brandName'},{path:'ATM>/ipAddress'},{path:'ATM>/installationDate'} ], formatter:'.Formatters.createATMPage3' }" text="Next (Preview)" press="goToCreateATMPage4" />
+                        </Toolbar>
+                    </footer>
+                </Page>
+                <Page id="create-atm-page-4" title="Preview (4/4)" showNavButton="true" navButtonPress="goBackToCreateATMPage3">
+                    <content>
+                        <form:SimpleForm editable="false">
+                            <Label class="sapUiSmallMarginTop" text="ATM ID" />
+                            <Input enabled="false" value="{ATM>/atmId}"/>
+                            <Label class="sapUiSmallMarginTop" text="ATM Name" />
+                            <Input enabled="false" value="{ATM>/atmName}"/>
+                            <Label class="sapUiSmallMarginTop" text="Operator" />
+                            <ComboBox enabled="false" selectedKey="{ATM>/userid}" items="{ path: 'ATMCreateHelpers>/users/' }">
+                                <core:Item key="{ATMCreateHelpers>userId}" text="{ATMCreateHelpers>userFirstname} {ATMCreateHelpers>userLastname}" />
+                            </ComboBox>
+                            <Label class="sapUiSmallMarginTop" text="Bank" />
+                            <ComboBox enabled="false" selectedKey="{ATM>/bankId}" items="{ path: 'ATMCreateHelpers>/banks/' }">
+                                <core:Item key="{ATMCreateHelpers>bankId}" text="{ATMCreateHelpers>bankName}" />
+                            </ComboBox>
+                            <Label class="sapUiSmallMarginTop" text="Area" />
+                            <Input enabled="false" value="{ATM>/areaName}"/>
+                            <Label class="sapUiSmallMarginTop" text="City" />
+                            <ComboBox enabled="false" selectedKey="{ATM>/cityId}" items="{ path: 'ATMCreateHelpers>/cities/' }">
+                                <core:Item key="{ATMCreateHelpers>cityId}" text="{ATMCreateHelpers>cityName}" />
+                            </ComboBox>
+                            <Label class="sapUiSmallMarginTop" text="Pincode" />
+                            <Input enabled="false" value="{ATM>/pincode}"/>
+                            <Label class="sapUiSmallMarginTop" text="Latitude" />
+                            <Input enabled="false" value="{ATM>/latitude}"/>
+                            <Label class="sapUiSmallMarginTop" text="Longitude" />
+                            <Input enabled="false" value="{ATM>/logitude}"/>
+
+                            <Label class="sapUiSmallMarginTop"  text="Contact Name 1" />
+                            <Input enabled="false" type="Text" value="{ATM>/contactPerson1}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Contact Email 1" />
+                            <Input enabled="false" type="Text" value="{ATM>/contactEmail1}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Contact Phone 1" />
+                            <Input enabled="false" type="Text" value="{ATM>/contactNo1}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Contact Name 2" />
+                            <Input enabled="false" type="Text" value="{ATM>/contactPerson2}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Contact Email 2" />
+                            <Input enabled="false" type="Text" value="{ATM>/contactEmail2}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Contact Phone 2" />
+                            <Input enabled="false" type="Text" value="{ATM>/contactNo2}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Contact Name 3" />
+                            <Input enabled="false" type="Text" value="{ATM>/contactPerson3}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Contact Email 3" />
+                            <Input enabled="false" type="Text" value="{ATM>/contactEmail3}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Contact Phone 3" />
+                            <Input enabled="false" type="Text" value="{ATM>/contactNo3}" valueLiveUpdate="true" />
+                            
+                            <Label class="sapUiSmallMarginTop"  text="Device ID" />
+                            <Input enabled="false" type="Text" value="{ATM>/deviceid}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Brand" />
+                            <Input enabled="false" type="Text" value="{ATM>/brandName}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="IP Address" />
+                            <Input enabled="false" type="Text" value="{ATM>/ipAddress}" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Installation Date" />
+                            <DatePicker enabled="false" value="{ATM>/installationDate}" valueFormat="yyyy-MM-dd" displayFormat="dd MMM, yyyy" valueLiveUpdate="true" />
+                            <Label class="sapUiSmallMarginTop"  text="Online" />
+                            <Switch enabled="false" state="{ATM>/online}"></Switch>
+                            <Label class="sapUiSmallMarginTop"  text="Status" />
+                            <Switch enabled="false" state="{ATM>/status}"></Switch>
+                        </form:SimpleForm>
+                    </content>
+                    <footer>
+                        <Toolbar>
+                            <ToolbarSpacer />
+                            <Button text="Cancel" press="onCancelCreateATM" />
+                            <Button text="Create ATM" press="submitCreateATM" type="Emphasized" />
                         </Toolbar>
                     </footer>
                 </Page>

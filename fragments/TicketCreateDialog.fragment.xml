@@ -3,11 +3,11 @@
         <content>
             <form:SimpleForm editable="true">
                 <Label text="ATM" />
-                <Select selectedKey="{TicketCreate>/atm}" items="{
+                <ComboBox selectedKey="{TicketCreate>/atm}" items="{
                         path: 'TicketCreate>/all_atms'
                     }">
                     <core:Item key="{TicketCreate>id}" text="{TicketCreate>name}" />
-                </Select>
+                </ComboBox>
                 <Label text="Priority" />
                 <Select selectedKey="{TicketCreate>/priority}">
                     <core:Item key="HIGH" text="High" />

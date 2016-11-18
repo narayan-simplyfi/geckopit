@@ -12,6 +12,9 @@ sap.ui.define([
 	var init = function(oThis) {
 		var oView = oThis.getView();
 		var mapDom = oView.byId("atms-page-map").getDomRef();
+		if (oThis.getModelData("View", "/show") === "list" && !oThis._mapList) {
+			mapListInit(oThis);
+		}
 		var mapOptions = {
 			center: new google.maps.LatLng(0, 0),
 			zoom: 6,
@@ -20,10 +23,31 @@ sap.ui.define([
 		oThis._map = new google.maps.Map(mapDom, mapOptions);
 	};
 
+	var mapListInit = function(oThis) {
+		var oView = oThis.getView();
+		var mapDomList = oView.byId("atms-page-detail-map").getDomRef();
+		var mapOptions = {
+			center: new google.maps.LatLng(0, 0),
+			zoom: 16,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+		oThis._mapList = new google.maps.Map(mapDomList, mapOptions);
+	};
+
 	var setData = function(oThis) {
 		clear(oThis);
 		setCenter(oThis);
 		setMarkers(oThis);
+	};
+
+	var setDataList = function(oThis) {
+		if (!oThis._mapList) return;
+		clearList(oThis);
+
+		jQuery.sap.delayedCall(100, oThis, function() {
+			setCenterList(oThis);
+			setMarkerList(oThis);
+		});
 	};
 
 	var setCenter = function(oThis) {
@@ -33,6 +57,60 @@ sap.ui.define([
 		}
 		var center = new google.maps.LatLng(data.LATITUDE, data.LONGITUDE);
 		oThis._map.panTo(center);
+	};
+
+	var setCenterList = function(oThis) {
+		var data = oThis.getModelData("SelectedATM", "/data");
+		if (!data) {
+			return;
+		}
+		var center = new google.maps.LatLng(data.LATITUDE, data.LONGITUDE);
+		oThis._mapList.panTo(center);
+	};
+
+	var setMarkerList = function(oThis) {
+		var atm = oThis.getModelData("SelectedATM", "/data");
+		// var oView = oThis.getView();
+		// oView.setModel(new JSONModel(data), "atmsModel");
+		var banks = [24, 25, 26, 28, 36, 51, 52, 53, 54, 55, 56, 57];
+		var img = "./images/";
+		var color = "G";
+
+		switch (atm.bank_status) {
+			case 'low':
+				// if (banks.indexOf(atm.BANK_ID) !== -1)
+				color = "G";
+				break;
+			case 'critical':
+				color = "R";
+				break;
+		}
+
+		if (banks.indexOf(atm.BANK_ID) !== -1) {
+			img += color + "_" + atm.BANK_ID + "_46X46.png";
+		} else {
+			img += color + "_64X64.png";
+		}
+
+		var icon = new google.maps.MarkerImage(
+			img,
+			new google.maps.Size(64, 64),
+			new google.maps.Point(0, 0),
+			new google.maps.Point(48, 32)
+		);
+		icon.url += '#' + atm.ATM_ID + "-Details";
+		var marker = new google.maps.Marker({
+			position: {
+				"lat": Number(atm.LATITUDE),
+				"lng": Number(atm.LONGITUDE)
+			},
+			map: oThis._mapList,
+			optimized: false,
+			icon: icon,
+			animation: google.maps.Animation.DROP
+		});
+
+		oThis._markersList.push(marker);
 	};
 
 	var setMarkers = function(oThis) {
@@ -178,6 +256,14 @@ sap.ui.define([
 		oThis._markers.length = 0;
 	};
 
+	var clearList = function(oThis) {
+		var oView = oThis.getView();
+		for (var i = 0; i < oThis._markersList.length; i++) {
+			oThis._markersList[i].setMap(null);
+		}
+		oThis._markersList.length = 0;
+	};
+
 	var selectPinned = function(oThis, oEvent) {
 		var oSource = oEvent.getSource();
 		var dom = oSource.getDomRef();
@@ -197,23 +283,27 @@ sap.ui.define([
 		oContainer.to(oSource.data("page"));
 		jQuery("#atm-details-popup-page-2-video").empty();
 		if (next === "2") {
-			jQuery("#atm-details-popup-page-2-video").append("<video id='video_with_controls' width='100%'  controls autoplay><source src='https://documentc918f143b.ap1.hana.ondemand.com/document/rest/download?DocId=Ht-bKpJuiJl2FzloaxpD_KxHGjvFaUkifh-j53HROpA' type='video/mp4'/>Your browser does not support the video tag</video>");
+			jQuery("#atm-details-popup-page-2-video").append(
+				"<video id='video_with_controls' width='100%'  controls autoplay><source src='https://documentc918f143b.ap1.hana.ondemand.com/document/rest/download?DocId=Ht-bKpJuiJl2FzloaxpD_KxHGjvFaUkifh-j53HROpA' type='video/mp4'/>Your browser does not support the video tag</video>"
+			);
 		}
 	};
-	
+
 	var goToTickets = function(oThis, oEvent) {
-        var oSource = oEvent.getSource();
-        var data = oSource.data();
-        var params = {};
-        params.type = data.type;
-        params.value = data.value;
-        params.atm = data.atm;
-        oThis.route("ticket-management", params);
+		var oSource = oEvent.getSource();
+		var data = oSource.data();
+		var params = {};
+		params.type = data.type;
+		params.value = data.value;
+		params.atm = data.atm;
+		oThis.route("ticket-management", params);
 	};
 
 	return {
 		init: init,
+		mapListInit: mapListInit,
 		setData: setData,
+		setDataList: setDataList,
 		pin: pin,
 		unpin: unpin,
 		selectPinned: selectPinned,

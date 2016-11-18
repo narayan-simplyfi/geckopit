@@ -112,7 +112,14 @@
                                     <items>
                                         <ColumnListItem>
                                             <cells>
-                                                <Text text="{SelectedOperator>TICKET_ID}" />
+                                                <Link text="{SelectedOperator>TICKET_ID}" press="goToTicketDetails">
+													<customData>
+														<core:CustomData key="type" value="-"/>
+														<core:CustomData key="value" value="-"/>
+														<core:CustomData key="atm" value="-"/>
+														<core:CustomData key="ticket_id" value="{SelectedOperator>TICKET_ID}"/>
+													</customData>
+												</Link>
                                                 <Text text="{SelectedOperator>ATM_ID}" />
                                                 <Text text="{SelectedOperator>BANK_NAME}" />
                                                 <Text text="{SelectedOperator>AREA_NAME}" />

@@ -173,6 +173,10 @@ sap.ui.define([
 				}
 			});
 
+			results.sort(function(a, b) {
+				return a.tickets.length < b.tickets.length;
+			});
+
 			oThis.setModel(new JSONModel({
 				"data": results,
 				"searched_length": results.length
@@ -272,6 +276,18 @@ sap.ui.define([
 			}
 			oList.filter(aFilters, "Application");
 		},
+
+		goToTicketDetails: function(oEvent) {
+			var oThis = this;
+			var oSource = oEvent.getSource();
+			var data = oSource.data();
+			var params = {};
+			params.type = data.type;
+			params.value = data.value;
+			params.atm = data.atm;
+			params.ticket_id = data.ticket_id;
+			oThis.route("ticket-management", params);
+		}
 
 	});
 });

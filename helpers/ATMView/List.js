@@ -5,8 +5,9 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"ipms/atm/app/helpers/Api",
 	"ipms/atm/app/helpers/Utils",
-	"ipms/atm/app/helpers/Urls"
-], function(JSONModel, BusyIndicator, MessageToast, Filter, Api, Utils, Urls) {
+	"ipms/atm/app/helpers/Urls",
+	"ipms/atm/app/helpers/ATMView/Map"
+], function(JSONModel, BusyIndicator, MessageToast, Filter, Api, Utils, Urls, Map) {
 	"use strict";
 
 	var init = function(oThis) {
@@ -66,6 +67,7 @@ sap.ui.define([
 			"data": data,
 			"path": path
 		}), 'SelectedATM');
+		Map.setDataList(oThis);
 	};
 
 	var refresh = function(oThis) {
@@ -75,10 +77,21 @@ sap.ui.define([
 		if (!oThis.getModel("SelectedATM")) {
 			return;
 		}
-
 		var path = oThis.getModelData("SelectedATM", "/path");
 		var index = path.substr(path.lastIndexOf("/") + 1, path.length);
 		oList.setSelectedItem(oList.getItems()[index]);
+		if (!oThis._mapList) {
+			jQuery.sap.delayedCall(100, oThis, function() {
+				Map.mapListInit(oThis);
+				jQuery.sap.delayedCall(100, oThis, function() {
+					Map.setDataList(oThis);
+				});
+			});
+		} else {
+			jQuery.sap.delayedCall(100, oThis, function() {
+				Map.setDataList(oThis);
+			});
+		}
 	};
 
 	var filter = function(oThis, oEvent) {
@@ -149,6 +162,14 @@ sap.ui.define([
 			var banks = data2[0].result;
 			var cities = data3[0].result;
 
+			cities.sort(function(a, b) {
+				if (a.cityName > b.cityName) {
+					return 1;
+				} else {
+					return -1;
+				}
+			});
+
 			data1[0].result.forEach(function(user, index) {
 				if (user.userStatus === "A") {
 					users.push(user);
@@ -199,6 +220,12 @@ sap.ui.define([
 		oNavContainer.to(oCore.byId("create-atm-page-3"));
 	};
 
+	var goToPage4 = function(oThis) {
+		var oCore = sap.ui.getCore();
+		var oNavContainer = oCore.byId("create-atm-nc");
+		oNavContainer.to(oCore.byId("create-atm-page-4"));
+	};
+
 	var goBackToPage1 = function(oThis) {
 		var oCore = sap.ui.getCore();
 		var oNavContainer = oCore.byId("create-atm-nc");
@@ -209,6 +236,12 @@ sap.ui.define([
 		var oCore = sap.ui.getCore();
 		var oNavContainer = oCore.byId("create-atm-nc");
 		oNavContainer.backToPage(oCore.byId("create-atm-page-2"));
+	};
+
+	var goBackToPage3 = function(oThis) {
+		var oCore = sap.ui.getCore();
+		var oNavContainer = oCore.byId("create-atm-nc");
+		oNavContainer.backToPage(oCore.byId("create-atm-page-3"));
 	};
 
 	var create = function(oThis) {
@@ -306,8 +339,10 @@ sap.ui.define([
 		closeCreate: closeCreate,
 		goToPage2: goToPage2,
 		goToPage3: goToPage3,
+		goToPage4: goToPage4,
 		goBackToPage1: goBackToPage1,
 		goBackToPage2: goBackToPage2,
+		goBackToPage3: goBackToPage3,
 		create: create,
 		sensorSwitch: sensorSwitch
 	};

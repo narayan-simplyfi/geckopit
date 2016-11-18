@@ -28,6 +28,11 @@ sap.ui.define([
 			oThis.Formatters = Formatters;
 			oThis._router = oComponent.getRouter();
 			oThis._router.getRoute("atms").attachMatched(oThis._init, oThis);
+			oThis._router.getRoute("login").attachMatched(oThis._refreshStop, oThis);
+			oThis._router.getRoute("dashboard").attachMatched(oThis._refreshStop, oThis);
+			oThis._router.getRoute("ticket-management").attachMatched(oThis._refreshStop, oThis);
+			oThis._router.getRoute("operators").attachMatched(oThis._refreshStop, oThis);
+			oThis._router.getRoute("all").attachMatched(oThis._refreshStop, oThis);
 			oThis._hashChanger = new HashChanger();
 		},
 
@@ -36,9 +41,11 @@ sap.ui.define([
 			var oView = oThis.getView();
 			Map.init(oThis);
 		},
-
+		
 		_map: null,
 		_markers: [],
+		_mapList: null,
+		_markersList: [],
 
 		_init: function(oEvent) {
 			var oThis = this;
@@ -287,7 +294,11 @@ sap.ui.define([
 					}
 				});
 			}
-
+			
+			filteredATMS.sort(function(a, b){
+				return a.CRITICAL_COUNT < b.CRITICAL_COUNT;
+			});		
+			
 			oThis.setModel(new JSONModel({
 				"data": filteredATMS,
 				"searched_length": filteredATMS.length
@@ -474,6 +485,11 @@ sap.ui.define([
 			List.goToPage3(oThis);
 		},
 
+		goToCreateATMPage4: function() {
+			var oThis = this;
+			List.goToPage4(oThis);
+		},
+
 		goBackToCreateATMPage1: function() {
 			var oThis = this;
 			List.goBackToPage1(oThis);
@@ -482,6 +498,11 @@ sap.ui.define([
 		goBackToCreateATMPage2: function() {
 			var oThis = this;
 			List.goBackToPage2(oThis);
+		},
+
+		goBackToCreateATMPage3: function() {
+			var oThis = this;
+			List.goBackToPage3(oThis);
 		},
 
 		submitCreateATM: function() {

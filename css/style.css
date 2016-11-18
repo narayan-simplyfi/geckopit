@@ -20,11 +20,27 @@
     background: rgba(0, 74, 113, 0.62);
 }
 
-.ticket-details-page .sapMITBText,
-.atms-details-page .sapMITBText {
+.ticket-details-page .sapMITBText {
     text-shadow: none !important;
-    color: #fff !important;
+    color: #ffffff !important;
 }
+
+.atms-details-page .sapMITBText {
+    text-shadow: 0 0 1px #000;
+    color: #ffffff !important;
+    font-weight: bold;
+    background: rgba(21, 21, 21, 0.68);
+    height: 20px;
+    width: 120px;
+    margin-top: 3px;
+}
+
+
+.atms-details-page .sapMITBTab {
+    width: 120px;
+    margin-top: 5px;
+}
+
 
 .operators-details-header {}
 
@@ -85,4 +101,22 @@
 
 .atm-details-popup-page-1-content-sensors-single .sapMObjStatusText {
     font-size: 13px;
+}
+
+.atms-page-detail-map {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 277px;
+    z-index: 2;
+}
+
+.atm-details-ictb {
+    position: absolute;
+    top: 180px;
+    width: 100%;
+    bottom: 0;
+}
+.atm-details-ictb .sapMITBHead {
+    z-index: 3;
 }
