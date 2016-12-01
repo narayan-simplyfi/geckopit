@@ -163,6 +163,12 @@ sap.ui.define([
 			var banks = data2[0].result;
 			var cities = data3[0].result;
 
+			data1[0].result.forEach(function(user, index) {
+				if (user.userStatus === "A") {
+					users.push(user);
+				}
+			});
+			
 			cities.sort(function(a, b) {
 				if (a.cityName > b.cityName) {
 					return 1;
@@ -170,10 +176,20 @@ sap.ui.define([
 					return -1;
 				}
 			});
-
-			data1[0].result.forEach(function(user, index) {
-				if (user.userStatus === "A") {
-					users.push(user);
+			
+			banks.sort(function(a, b) {
+				if (a.bankName > b.bankName) {
+					return 1;
+				} else {
+					return -1;
+				}
+			});
+			
+			users.sort(function(a, b) {
+				if (a.userFirstname > b.userFirstname) {
+					return 1;
+				} else {
+					return -1;
 				}
 			});
 
